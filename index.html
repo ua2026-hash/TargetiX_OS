@@ -432,6 +432,7 @@
         <div class="custom-select-wrapper" id="device-select-wrapper">
           <select id="device-select" onchange="onDeviceChange()">
             <option value="dev" data-manifest="manifest_dev.json" data-img="device.png">TargetiX_DEV</option>
+            <option value="sl1" data-manifest="manifest_sl1.json" data-img="device_sl1.png">TargetiX_SL1</option>
             <option value="sl2" data-manifest="manifest_sl2.json" data-img="device_sl2.png">TargetiX_SL2</option>
             <option value="sl3" data-manifest="manifest_sl3.json" data-img="device_sl3.png">TargetiX_SL3</option>
             <option value="sl4" data-manifest="manifest_sl4.json" data-img="device_sl4.png">TargetiX_SL4</option>
@@ -499,6 +500,7 @@
 
     const deviceVersions = {
       dev: devInDevelopment,
+      sl1: devInDevelopment,
       sl2: devInDevelopment,
       sl3: devInDevelopment,
       sl4: devInDevelopment,
