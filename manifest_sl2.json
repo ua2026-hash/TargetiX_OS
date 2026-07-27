@@ -1,0 +1,12 @@
+{
+  "name": "TargetiX_SL2",
+  "version": "2.6",
+  "builds": [
+    {
+      "chipFamily": "ESP32-S2",
+      "parts": [
+        { "path": "firmware_sl2.bin", "offset": 0 }
+      ]
+    }
+  ]
+}
