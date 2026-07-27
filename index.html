@@ -434,6 +434,8 @@
             <option value="dev" data-manifest="manifest_dev.json" data-img="device.png">TargetiX_DEV</option>
             <option value="sl2" data-manifest="manifest_sl2.json" data-img="device_sl2.png">TargetiX_SL2</option>
             <option value="sl3" data-manifest="manifest_sl3.json" data-img="device_sl3.png">TargetiX_SL3</option>
+            <option value="sl4" data-manifest="manifest_sl4.json" data-img="device_sl4.png">TargetiX_SL4</option>
+            <option value="sl5" data-manifest="manifest_sl5.json" data-img="device_sl5.png">TargetiX_SL5</option>
           </select>
 
           <div class="custom-select-trigger">
@@ -487,33 +489,20 @@
 
   <script>
     // Конфигурация версий для каждого устройства
+    const devInDevelopment = [
+      {
+        value: 'dev',
+        label: 'В разработке',
+        changelog: '• Прошивка для данного устройства находится в процессе разработки.<br>• Следите за обновлениями!'
+      }
+    ];
+
     const deviceVersions = {
-      dev: [
-        {
-          value: '2.6',
-          label: 'v2.6 (Релиз)',
-          changelog: '• Полная поддержка TargetiX_DEV (Bootloader + Partitions)<br>• Основная функциональность системы<br>• Оптимизация стабильности Web Serial'
-        },
-        {
-          value: 'dev',
-          label: 'В разработке',
-          changelog: '• Прошивка для данного устройства находится в процессе разработки.<br>• Следите за обновлениями!'
-        }
-      ],
-      sl2: [
-        {
-          value: 'dev',
-          label: 'В разработке',
-          changelog: '• Прошивка для данного устройства находится в процессе разработки.<br>• Следите за обновлениями!'
-        }
-      ],
-      sl3: [
-        {
-          value: 'dev',
-          label: 'В разработке',
-          changelog: '• Прошивка для данного устройства находится в процессе разработки.<br>• Следите за обновлениями!'
-        }
-      ]
+      dev: devInDevelopment,
+      sl2: devInDevelopment,
+      sl3: devInDevelopment,
+      sl4: devInDevelopment,
+      sl5: devInDevelopment
     };
 
     // --- 1. ОБРАБОТКА ИНДИКАТОРА ЗАГРУЗКИ ФОТО ---
@@ -651,7 +640,7 @@
       const versionWrapper = document.getElementById('version-select-wrapper');
 
       const selectedDevice = deviceSelect.value;
-      const versions = deviceVersions[selectedDevice] || deviceVersions['dev'];
+      const versions = deviceVersions[selectedDevice] || devInDevelopment;
 
       // Заполняем <option> для элемента версий
       versionSelect.innerHTML = '';
