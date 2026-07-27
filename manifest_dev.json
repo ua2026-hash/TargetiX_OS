@@ -1,0 +1,12 @@
+{
+  "name": "TargetiX_DEV",
+  "version": "2.6",
+  "builds": [
+    {
+      "chipFamily": "ESP32",
+      "parts": [
+        { "path": "firmware_dev.bin", "offset": 0 }
+      ]
+    }
+  ]
+}
