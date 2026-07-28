@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TargetiX OS — Прошивка устройства</title>
 
-  <!-- Скрипт мгновенной установки темы (предотвращает мигание) -->
+  <!-- Скрипт мгновенной установки темы -->
   <script>
     (function() {
       const savedTheme = localStorage.getItem('theme');
@@ -21,42 +21,42 @@
   <!-- Шрифт Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <style>
-    /* Динамические темы UI */
+    /* Современные токены UI */
     :root[data-theme="dark"] {
-      --bg: #07090e;
-      --card-bg: rgba(15, 23, 36, 0.75);
-      --card-border: rgba(255, 255, 255, 0.08);
-      --card-border-hover: rgba(255, 255, 255, 0.18);
-      --text-main: #f8fafc;
-      --text-muted: #94a3b8;
+      --bg: #030712;
+      --card-bg: rgba(17, 24, 39, 0.7);
+      --card-border: rgba(255, 255, 255, 0.12);
+      --card-border-hover: rgba(59, 130, 246, 0.4);
+      --text-main: #f9fafb;
+      --text-muted: #9ca3af;
       --primary: #3b82f6;
       --primary-hover: #2563eb;
-      --primary-glow: rgba(59, 130, 246, 0.25);
-      --input-bg: rgba(10, 15, 26, 0.6);
-      --dropdown-hover: rgba(59, 130, 246, 0.12);
-      --shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
-      --skeleton-bg: rgba(255, 255, 255, 0.04);
-      --inner-card-bg: rgba(8, 12, 20, 0.5);
+      --primary-glow: rgba(59, 130, 246, 0.35);
+      --input-bg: rgba(15, 23, 42, 0.75);
+      --dropdown-hover: rgba(59, 130, 246, 0.15);
+      --shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.75);
+      --skeleton-bg: rgba(255, 255, 255, 0.05);
+      --inner-card-bg: rgba(15, 23, 42, 0.6);
     }
 
     :root[data-theme="light"] {
-      --bg: #f1f5f9;
+      --bg: #f8fafc;
       --card-bg: rgba(255, 255, 255, 0.85);
-      --card-border: rgba(203, 213, 225, 0.8);
-      --card-border-hover: rgba(148, 163, 184, 0.8);
+      --card-border: rgba(226, 232, 240, 0.9);
+      --card-border-hover: rgba(37, 99, 235, 0.4);
       --text-main: #0f172a;
       --text-muted: #64748b;
       --primary: #2563eb;
       --primary-hover: #1d4ed8;
-      --primary-glow: rgba(37, 99, 235, 0.2);
+      --primary-glow: rgba(37, 99, 235, 0.25);
       --input-bg: #ffffff;
       --dropdown-hover: rgba(37, 99, 235, 0.08);
-      --shadow: 0 15px 35px rgba(0, 0, 0, 0.06);
-      --skeleton-bg: rgba(0, 0, 0, 0.05);
-      --inner-card-bg: rgba(248, 250, 252, 0.8);
+      --shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.12);
+      --skeleton-bg: rgba(0, 0, 0, 0.04);
+      --inner-card-bg: rgba(241, 245, 249, 0.8);
     }
 
     * {
@@ -66,8 +66,7 @@
     }
 
     html, body {
-      height: 100%;
-      overflow: hidden; /* Исключаем прокрутку страницы */
+      min-height: 100vh;
     }
 
     body {
@@ -78,21 +77,22 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 16px;
+      padding: 24px 16px;
       position: relative;
       transition: background-color 0.3s ease, color 0.3s ease;
+      overflow-x: hidden;
     }
 
-    /* Фоновые размытые сферы (Glow Effects) */
+    /* Фоновые светящиеся сферы */
     .bg-glow-1 {
       position: absolute;
-      width: 450px;
-      height: 450px;
-      background: var(--primary);
-      filter: blur(160px);
-      opacity: 0.18;
-      top: 10%;
-      left: 15%;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, var(--primary) 0%, rgba(59, 130, 246, 0) 70%);
+      filter: blur(100px);
+      opacity: 0.22;
+      top: -100px;
+      left: -100px;
       border-radius: 50%;
       z-index: -1;
       pointer-events: none;
@@ -100,25 +100,26 @@
 
     .bg-glow-2 {
       position: absolute;
-      width: 350px;
-      height: 350px;
-      background: #8b5cf6;
-      filter: blur(150px);
-      opacity: 0.12;
-      bottom: 10%;
-      right: 15%;
+      width: 550px;
+      height: 550px;
+      background: radial-gradient(circle, #8b5cf6 0%, rgba(139, 92, 246, 0) 70%);
+      filter: blur(100px);
+      opacity: 0.18;
+      bottom: -100px;
+      right: -100px;
       border-radius: 50%;
       z-index: -1;
       pointer-events: none;
     }
 
+    /* Увеличенный главный контейнер */
     .main-container {
-      max-width: 860px;
+      max-width: 1020px;
       width: 100%;
       position: relative;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 16px;
     }
 
     /* Главная стеклянная карточка */
@@ -126,15 +127,15 @@
       position: relative;
       background: var(--card-bg);
       border: 1px solid var(--card-border);
-      border-radius: 20px;
-      padding: 20px;
+      border-radius: 28px;
+      padding: 32px;
       box-shadow: var(--shadow);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      transition: background 0.3s ease, border-color 0.3s ease;
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      transition: all 0.3s ease;
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 24px;
     }
 
     /* Шапка карточки */
@@ -142,94 +143,97 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding-bottom: 12px;
+      padding-bottom: 20px;
       border-bottom: 1px solid var(--card-border);
     }
 
     .brand-title {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 14px;
     }
 
     .brand-icon {
-      width: 28px;
-      height: 28px;
+      width: 36px;
+      height: 36px;
       color: var(--primary);
-      filter: drop-shadow(0 0 8px var(--primary-glow));
+      filter: drop-shadow(0 0 12px var(--primary-glow));
     }
 
     h1 {
-      font-size: 18px;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      line-height: 1;
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -0.025em;
+      line-height: 1.1;
     }
 
     .brand-subtitle {
-      font-size: 12px;
+      font-size: 14px;
       color: var(--text-muted);
-      margin-top: 2px;
+      margin-top: 4px;
+      font-weight: 500;
     }
 
     .theme-toggle-btn {
       background: var(--inner-card-bg);
       border: 1px solid var(--card-border);
-      border-radius: 10px;
-      padding: 6px 10px;
+      border-radius: 14px;
+      padding: 10px 16px;
       color: var(--text-main);
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 6px;
-      font-size: 11px;
+      gap: 8px;
+      font-size: 13px;
       font-weight: 600;
       transition: all 0.2s ease;
     }
 
     .theme-toggle-btn:hover {
       border-color: var(--primary);
-      transform: translateY(-1px);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px var(--primary-glow);
     }
 
     .theme-toggle-btn svg {
-      width: 14px;
-      height: 14px;
+      width: 18px;
+      height: 18px;
       stroke: var(--primary);
       fill: none;
     }
 
-    /* Двухколоночный макет (Grid Layout) */
+    /* Двухколоночная сетка */
     .card-grid {
       display: grid;
-      grid-template-columns: 240px 1fr;
-      gap: 20px;
+      grid-template-columns: 320px 1fr;
+      gap: 28px;
       align-items: start;
     }
 
-    @media (max-width: 680px) {
+    @media (max-width: 820px) {
       .card-grid {
         grid-template-columns: 1fr;
       }
     }
 
-    /* Левая колонка: Пьюр фото и USB status */
+    /* Левая колонка */
     .left-col {
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 16px;
     }
 
     .device-img-wrapper {
       position: relative;
-      border-radius: 14px;
+      border-radius: 20px;
       overflow: hidden;
       border: 1px solid var(--card-border);
-      height: 140px;
+      height: 220px;
       background-color: var(--skeleton-bg);
       display: flex;
       align-items: center;
       justify-content: center;
+      padding: 16px;
     }
 
     .device-img-wrapper::before {
@@ -260,40 +264,43 @@
       max-height: 100%;
       object-fit: contain;
       opacity: 0;
-      transition: opacity 0.4s ease, transform 0.3s ease;
+      transition: opacity 0.4s ease, transform 0.4s ease;
       position: relative;
       z-index: 2;
+      filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.3));
     }
 
     .device-img-wrapper.loaded .device-img {
       opacity: 1;
+      animation: float 6s ease-in-out infinite;
     }
 
-    .device-img-wrapper:hover .device-img {
-      transform: scale(1.04);
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-6px); }
     }
 
     /* Индикатор USB */
     .usb-status-card {
       background: var(--inner-card-bg);
       border: 1px solid var(--card-border);
-      border-radius: 12px;
-      padding: 10px 12px;
+      border-radius: 16px;
+      padding: 14px 16px;
       text-align: left;
     }
 
     .usb-status-header {
       display: flex;
       align-items: center;
-      gap: 8px;
-      font-size: 12px;
-      font-weight: 600;
+      gap: 10px;
+      font-size: 14px;
+      font-weight: 700;
     }
 
     .status-indicatorDisconnected,
     .status-indicatorConnected {
-      width: 8px;
-      height: 8px;
+      width: 10px;
+      height: 10px;
       border-radius: 50%;
       flex-shrink: 0;
       transition: background-color 0.3s ease, box-shadow 0.3s ease;
@@ -301,43 +308,49 @@
 
     .status-indicatorDisconnected {
       background-color: #ef4444;
-      box-shadow: 0 0 8px rgba(239, 68, 68, 0.5);
+      box-shadow: 0 0 10px rgba(239, 68, 68, 0.6);
     }
 
     .status-indicatorConnected {
       background-color: #10b981;
-      box-shadow: 0 0 10px rgba(16, 185, 129, 0.7);
+      box-shadow: 0 0 12px rgba(16, 185, 129, 0.8);
       animation: pulse-green 2s infinite;
     }
 
     @keyframes pulse-green {
       0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.6); }
-      70% { box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+      70% { box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
       100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
     }
 
     .usb-hint {
-      font-size: 11px;
+      font-size: 12px;
       color: var(--text-muted);
-      margin-top: 4px;
-      line-height: 1.3;
+      margin-top: 6px;
+      line-height: 1.4;
     }
 
     .usb-hint strong {
       color: var(--primary);
     }
 
-    /* Правая колонка: Элементы управления и Changelog */
+    /* Правая колонка */
     .right-col {
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 18px;
     }
 
     .form-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 10px;
+      gap: 14px;
+    }
+
+    @media (max-width: 520px) {
+      .form-row {
+        grid-template-columns: 1fr;
+      }
     }
 
     .form-group {
@@ -346,13 +359,13 @@
     }
 
     label {
-      font-size: 11px;
-      font-weight: 600;
+      font-size: 12px;
+      font-weight: 700;
       color: var(--text-muted);
       text-transform: uppercase;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.06em;
       display: block;
-      margin-bottom: 5px;
+      margin-bottom: 8px;
     }
 
     /* Кастомный селект */
@@ -367,13 +380,13 @@
 
     .custom-select-trigger {
       width: 100%;
-      padding: 8px 12px;
-      border-radius: 10px;
+      padding: 12px 16px;
+      border-radius: 14px;
       border: 1px solid var(--card-border);
       background: var(--input-bg);
       color: var(--text-main);
-      font-size: 13px;
-      font-weight: 500;
+      font-size: 14px;
+      font-weight: 600;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -387,12 +400,12 @@
 
     .custom-select-wrapper.open .custom-select-trigger {
       border-color: var(--primary);
-      box-shadow: 0 0 0 3px var(--primary-glow);
+      box-shadow: 0 0 0 4px var(--primary-glow);
     }
 
     .custom-select-trigger .arrow {
-      width: 14px;
-      height: 14px;
+      width: 16px;
+      height: 16px;
       stroke: var(--text-muted);
       transition: transform 0.2s ease;
       flex-shrink: 0;
@@ -405,24 +418,24 @@
 
     .custom-options {
       position: absolute;
-      top: calc(100% + 4px);
+      top: calc(100% + 6px);
       left: 0;
       right: 0;
       background: var(--card-bg);
       border: 1px solid var(--card-border);
-      border-radius: 10px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
+      border-radius: 14px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
       opacity: 0;
       visibility: hidden;
       pointer-events: none;
-      transform: translateY(-4px);
-      transition: all 0.15s ease;
+      transform: translateY(-6px);
+      transition: all 0.2s ease;
       z-index: 50;
       overflow: hidden;
-      padding: 4px;
-      max-height: 160px;
+      padding: 6px;
+      max-height: 200px;
       overflow-y: auto;
     }
 
@@ -434,11 +447,11 @@
     }
 
     .custom-option {
-      padding: 6px 10px;
-      font-size: 12px;
+      padding: 10px 12px;
+      font-size: 13px;
       font-weight: 500;
       color: var(--text-main);
-      border-radius: 6px;
+      border-radius: 10px;
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -453,12 +466,12 @@
     .custom-option.selected {
       background: var(--primary-glow);
       color: var(--primary);
-      font-weight: 600;
+      font-weight: 700;
     }
 
     .custom-option .check-icon {
-      width: 14px;
-      height: 14px;
+      width: 16px;
+      height: 16px;
       opacity: 0;
       stroke: var(--primary);
     }
@@ -467,69 +480,69 @@
       opacity: 1;
     }
 
-    /* Changelog с микро-скроллом */
+    /* Changelog */
     .changelog-card {
       background: var(--inner-card-bg);
       border: 1px solid var(--card-border);
-      border-radius: 12px;
-      padding: 10px 12px;
+      border-radius: 16px;
+      padding: 16px;
       text-align: left;
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 12px;
     }
 
     .changelog-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding-bottom: 6px;
+      padding-bottom: 10px;
       border-bottom: 1px solid var(--card-border);
     }
 
     .changelog-title-group {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
     }
 
     .changelog-icon {
-      width: 14px;
-      height: 14px;
+      width: 18px;
+      height: 18px;
       stroke: var(--primary);
     }
 
     .changelog-title {
-      font-size: 12px;
-      font-weight: 600;
+      font-size: 14px;
+      font-weight: 700;
     }
 
     .version-badge {
-      font-size: 10px;
-      font-weight: 700;
-      padding: 2px 6px;
-      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 3px 10px;
+      border-radius: 20px;
       background: var(--primary-glow);
       color: var(--primary);
-      border: 1px solid rgba(59, 130, 246, 0.2);
+      border: 1px solid rgba(59, 130, 246, 0.3);
     }
 
     .changelog-body {
       display: flex;
       flex-direction: column;
-      gap: 6px;
-      max-height: 90px;
+      gap: 10px;
+      max-height: 130px;
       overflow-y: auto;
-      padding-right: 4px;
+      padding-right: 6px;
       transition: opacity 0.15s ease;
     }
 
     .changelog-body::-webkit-scrollbar {
-      width: 4px;
+      width: 5px;
     }
     .changelog-body::-webkit-scrollbar-thumb {
       background: var(--card-border);
-      border-radius: 4px;
+      border-radius: 6px;
     }
 
     .changelog-body.updating {
@@ -539,25 +552,25 @@
     .changelog-item {
       display: flex;
       align-items: flex-start;
-      gap: 6px;
-      font-size: 12px;
-      line-height: 1.35;
+      gap: 8px;
+      font-size: 13px;
+      line-height: 1.45;
     }
 
     .tag {
-      font-size: 9px;
-      font-weight: 700;
-      padding: 1px 5px;
-      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 800;
+      padding: 2px 6px;
+      border-radius: 6px;
       text-transform: uppercase;
       flex-shrink: 0;
-      margin-top: 1px;
+      margin-top: 2px;
     }
 
-    .tag-feat { background: rgba(16, 185, 129, 0.15); color: #10b981; }
-    .tag-fix  { background: rgba(239, 68, 68, 0.15); color: #ef4444; }
-    .tag-impr { background: rgba(59, 130, 246, 0.15); color: #3b82f6; }
-    .tag-dev  { background: rgba(245, 158, 11, 0.15); color: #f59e0b; }
+    .tag-feat { background: rgba(16, 185, 129, 0.2); color: #10b981; }
+    .tag-fix  { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
+    .tag-impr { background: rgba(59, 130, 246, 0.2); color: #3b82f6; }
+    .tag-dev  { background: rgba(245, 158, 11, 0.2); color: #f59e0b; }
 
     .changelog-text-content {
       color: var(--text-main);
@@ -565,27 +578,28 @@
 
     /* Кнопка прошивки */
     esp-web-install-button {
-      margin-top: 4px;
+      margin-top: 6px;
     }
 
     esp-web-install-button button {
-      background: var(--primary);
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
       color: #ffffff;
       border: none;
-      padding: 10px 16px;
-      font-size: 13px;
-      font-weight: 600;
+      padding: 14px 20px;
+      font-size: 15px;
+      font-weight: 700;
       font-family: inherit;
-      border-radius: 10px;
+      border-radius: 14px;
       cursor: pointer;
       width: 100%;
-      transition: all 0.2s ease;
-      box-shadow: 0 4px 15px var(--primary-glow);
+      transition: all 0.25s ease;
+      box-shadow: 0 8px 25px var(--primary-glow);
     }
 
     esp-web-install-button button:hover {
-      background-color: var(--primary-hover);
-      transform: translateY(-1px);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 30px var(--primary-glow);
+      filter: brightness(1.05);
     }
 
     esp-web-install-button button:active {
@@ -594,16 +608,19 @@
 
     .unsupported-msg {
       color: #ef4444;
-      font-size: 11px;
+      font-size: 12px;
       display: block;
-      margin-top: 4px;
+      margin-top: 6px;
+      font-weight: 500;
     }
 
     footer {
       text-align: center;
-      font-size: 11px;
+      font-size: 12px;
       color: var(--text-muted);
+      font-weight: 500;
       opacity: 0.8;
+      margin-top: 8px;
     }
   </style>
 
@@ -1035,7 +1052,7 @@
       updateManifest();
     }
 
-    // 8. ОБНОЛЕНИЕ МАНИФЕСТА И CHANGELOG
+    // 8. ОБНОВЛЕНИЕ МАНИФЕСТА И CHANGELOG
     function updateManifest() {
       const deviceSelect = document.getElementById('device-select');
       const versionSelect = document.getElementById('version-select');
