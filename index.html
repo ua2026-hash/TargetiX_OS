@@ -77,7 +77,6 @@
       transition: background-color 0.3s ease, color 0.3s ease;
     }
 
-    /* Фоновый декоративный элемент */
     body::before {
       content: '';
       position: absolute;
@@ -111,7 +110,6 @@
       transition: background 0.3s ease, border-color 0.3s ease;
     }
 
-    /* Кнопка переключения темы */
     .theme-toggle-btn {
       position: absolute;
       top: 16px;
@@ -146,7 +144,6 @@
       fill: none;
     }
 
-    /* Индикатор загрузки фото (Skeleton Loader) */
     .device-img-wrapper {
       position: relative;
       margin-bottom: 24px;
@@ -157,7 +154,6 @@
       background-color: var(--skeleton-bg);
     }
 
-    /* Анимация пульсации скелетона */
     .device-img-wrapper::before {
       content: '';
       position: absolute;
@@ -230,7 +226,6 @@
       margin-bottom: 8px;
     }
 
-    /* --- КАСТОМНЫЙ ДРОПДАУН --- */
     .custom-select-wrapper {
       position: relative;
       user-select: none;
@@ -341,7 +336,6 @@
       opacity: 1;
     }
 
-    /* --- CHANGELOG --- */
     .changelog {
       background: var(--input-bg);
       border: 1px solid var(--card-border);
@@ -361,7 +355,6 @@
       font-weight: 600;
     }
 
-    /* Кнопка прошивки */
     esp-web-install-button button {
       background: var(--primary);
       color: #ffffff;
@@ -411,13 +404,11 @@
 
   <div class="container">
     <div class="card">
-      <!-- Кнопка переключения темы -->
       <button class="theme-toggle-btn" id="theme-toggle" title="Сменить тему">
         <svg id="theme-icon" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></svg>
         <span id="theme-text">Тёмная</span>
       </button>
 
-      <!-- Фото устройства с индикатором загрузки -->
       <div class="device-img-wrapper" id="img-wrapper">
         <img src="device_dev.png" alt="TargetiX" class="device-img" id="device-img">
       </div>
@@ -428,7 +419,6 @@
       <!-- Выбор модели устройства -->
       <div class="form-group">
         <label>Модель устройства</label>
-        
         <div class="custom-select-wrapper" id="device-select-wrapper">
           <select id="device-select" onchange="onDeviceChange()">
             <option value="dev" data-manifest="manifest_dev.json" data-img="device_dev.png">TargetiX_DEV</option>
@@ -453,7 +443,6 @@
       <!-- Выбор версии ПО -->
       <div class="form-group">
         <label>Версия ПО</label>
-        
         <div class="custom-select-wrapper" id="version-select-wrapper">
           <select id="version-select" onchange="updateManifest()"></select>
 
@@ -489,25 +478,45 @@
   </div>
 
   <script>
-    // Конфигурация версий для каждого устройства
-    const devInDevelopment = [
-      {
+    // По умолчанию глобальные данные о версиях пусты
+    let deviceVersions = {};
+
+    // 1. ДИНАМИЧЕСКАЯ ЗАГРУЗКА ВЕРСИЙ ИЗ versions.json ИЛИ С GITHUB
+    async function loadDynamicVersions() {
+      const changelogText = document.getElementById('changelog-text');
+      changelogText.textContent = 'Получение актуальных версий ПО...';
+
+      try {
+        // Пробуем загрузить внешнюю конфигурацию versions.json
+        const res = await fetch('versions.json?t=' + Date.now());
+        if (!res.ok) throw new Error('Файл versions.json не найден');
+        deviceVersions = await res.json();
+      } catch (e) {
+        console.warn('Не удалось загрузить versions.json, переходим на резервную конфигурацию...');
+        setFallbackVersions();
+      } finally {
+        onDeviceChange();
+      }
+    }
+
+    function setFallbackVersions() {
+      const devInDev = [{
         value: 'dev',
         label: 'В разработке',
-        changelog: '• Прошивка для данного устройства находится в процессе разработки.<br>• Следите за обновлениями!'
-      }
-    ];
+        changelog: '• Прошивка находится в процессе разработки.<br>• Следите за обновлениями!'
+      }];
 
-    const deviceVersions = {
-      dev: devInDevelopment,
-      sl1: devInDevelopment,
-      sl2: devInDevelopment,
-      sl3: devInDevelopment,
-      sl4: devInDevelopment,
-      sl5: devInDevelopment
-    };
+      deviceVersions = {
+        dev: devInDev,
+        sl1: devInDev,
+        sl2: devInDev,
+        sl3: devInDev,
+        sl4: devInDev,
+        sl5: devInDev
+      };
+    }
 
-    // --- 1. ОБРАБОТКА ИНДИКАТОРА ЗАГРУЗКИ ФОТО ---
+    // 2. ОБРАБОТКА ИНДИКАТОРА ЗАГРУЗКИ ФОТО
     const imgWrapper = document.getElementById('img-wrapper');
     const deviceImg = document.getElementById('device-img');
 
@@ -522,7 +531,7 @@
       deviceImg.addEventListener('error', handleImageLoad);
     }
 
-    // --- 2. ПЕРЕКЛЮЧАТЕЛЬ ТЕМЫ (DARK / LIGHT) ---
+    // 3. ПЕРЕКЛЮЧАТЕЛЬ ТЕМЫ (DARK / LIGHT)
     const themeBtn = document.getElementById('theme-toggle');
     const themeIcon = document.getElementById('theme-icon');
     const themeText = document.getElementById('theme-text');
@@ -552,7 +561,7 @@
       updateThemeUI(newTheme);
     });
 
-    // --- 3. ИНИЦИАЛИЗАЦИЯ И РЕНДЕР КАСТОМНОГО ДРОПДАУНА ---
+    // 4. ИНИЦИАЛИЗАЦИЯ И РЕНДЕР КАСТОМНОГО ДРОПДАУНА
     function initCustomSelect(wrapper) {
       const realSelect = wrapper.querySelector('select');
       const optionsContainer = wrapper.querySelector('.custom-options');
@@ -605,7 +614,7 @@
       });
     }
 
-    // --- 4. СОБЫТИЯ И ИНИЦИАЛИЗАЦИЯ ---
+    // 5. СОБЫТИЯ И ИНИЦИАЛИЗАЦИЯ
     document.addEventListener('DOMContentLoaded', () => {
       const wrappers = document.querySelectorAll('.custom-select-wrapper');
 
@@ -631,37 +640,37 @@
         });
       });
 
-      // Инициализируем версии для текущего устройства при старте
-      onDeviceChange();
+      // Загружаем данные динамически
+      loadDynamicVersions();
     });
 
-    // --- 5. ФУНКЦИЯ ОБНОВЛЕНИЯ ВЕРСИЙ ПРИ СМЕНЕ УСТРОЙСТВА ---
+    // 6. ФУНКЦИЯ ОБНОВЛЕНИЯ ВЕРСИЙ ПРИ СМЕНЕ УСТРОЙСТВА
     function onDeviceChange() {
       const deviceSelect = document.getElementById('device-select');
       const versionSelect = document.getElementById('version-select');
       const versionWrapper = document.getElementById('version-select-wrapper');
 
       const selectedDevice = deviceSelect.value;
-      const versions = deviceVersions[selectedDevice] || devInDevelopment;
+      const versions = deviceVersions[selectedDevice] || deviceVersions['dev'];
 
       // Заполняем <option> для элемента версий
       versionSelect.innerHTML = '';
-      versions.forEach(v => {
-        const opt = document.createElement('option');
-        opt.value = v.value;
-        opt.textContent = v.label;
-        opt.setAttribute('data-changelog', v.changelog);
-        versionSelect.appendChild(opt);
-      });
+      if (versions) {
+        versions.forEach(v => {
+          const opt = document.createElement('option');
+          opt.value = v.value;
+          opt.textContent = v.label;
+          opt.setAttribute('data-changelog', v.changelog);
+          if (v.manifest) opt.setAttribute('data-manifest', v.manifest);
+          versionSelect.appendChild(opt);
+        });
+      }
 
-      // Перестраиваем кастомный интерфейс выпадающего списка
       initCustomSelect(versionWrapper);
-
-      // Обновляем манифест, картинку и changelog
       updateManifest();
     }
 
-    // --- 6. ФУНКЦИЯ ОБНОВЛЕНИЯ МАНИФЕСТА И CHANGELOG ---
+    // 7. ФУНКЦИЯ ОБНОВЛЕНИЯ МАНИФЕСТА И CHANGELOG
     function updateManifest() {
       const deviceSelect = document.getElementById('device-select');
       const versionSelect = document.getElementById('version-select');
@@ -674,8 +683,11 @@
 
       if (!selectedDeviceOpt || !selectedVersionOpt) return;
 
-      // Смена манифеста в зависимости от устройства
-      const manifestPath = selectedDeviceOpt.getAttribute('data-manifest') || 'manifest_dev.json';
+      // Манифест может задаваться как на уровне версии, так и на уровне устройства
+      const versionManifest = selectedVersionOpt.getAttribute('data-manifest');
+      const deviceManifest = selectedDeviceOpt.getAttribute('data-manifest');
+      const manifestPath = versionManifest || deviceManifest || 'manifest_dev.json';
+
       installer.setAttribute('manifest', manifestPath);
 
       // Смена картинки при выборе устройства
@@ -685,16 +697,16 @@
         deviceImg.src = newImgSrc;
       }
 
-      // Смена changelog и управления кнопкой
+      // Смена changelog и скрытие кнопки при "dev"
       const changelog = selectedVersionOpt.getAttribute('data-changelog');
       const versionValue = selectedVersionOpt.value;
       
       if (versionValue === 'dev') {
         changelogTitle.textContent = 'Статус ПО:';
-        installer.style.display = 'none'; // Скрываем кнопку прошивки, если ПО в разработке
+        installer.style.display = 'none';
       } else {
         changelogTitle.textContent = `Что нового в v${versionValue}:`;
-        installer.style.display = 'block'; // Показываем кнопку для готовых версий
+        installer.style.display = 'block';
       }
 
       if (changelog) {
