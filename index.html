@@ -419,7 +419,7 @@
 
       <!-- Фото устройства с индикатором загрузки -->
       <div class="device-img-wrapper" id="img-wrapper">
-        <img src="device.png" alt="TargetiX" class="device-img" id="device-img">
+        <img src="device_dev.png" alt="TargetiX" class="device-img" id="device-img">
       </div>
 
       <h1>TargetiX OS</h1>
@@ -431,7 +431,7 @@
         
         <div class="custom-select-wrapper" id="device-select-wrapper">
           <select id="device-select" onchange="onDeviceChange()">
-            <option value="dev" data-manifest="manifest_dev.json" data-img="device.png">TargetiX_DEV</option>
+            <option value="dev" data-manifest="manifest_dev.json" data-img="device_dev.png">TargetiX_DEV</option>
             <option value="sl1" data-manifest="manifest_sl1.json" data-img="device_sl1.png">TargetiX_SL1</option>
             <option value="sl2" data-manifest="manifest_sl2.json" data-img="device_sl2.png">TargetiX_SL2</option>
             <option value="sl3" data-manifest="manifest_sl3.json" data-img="device_sl3.png">TargetiX_SL3</option>
@@ -685,14 +685,16 @@
         deviceImg.src = newImgSrc;
       }
 
-      // Смена changelog
+      // Смена changelog и управления кнопкой
       const changelog = selectedVersionOpt.getAttribute('data-changelog');
       const versionValue = selectedVersionOpt.value;
       
       if (versionValue === 'dev') {
         changelogTitle.textContent = 'Статус ПО:';
+        installer.style.display = 'none'; // Скрываем кнопку прошивки, если ПО в разработке
       } else {
         changelogTitle.textContent = `Что нового в v${versionValue}:`;
+        installer.style.display = 'block'; // Показываем кнопку для готовых версий
       }
 
       if (changelog) {
