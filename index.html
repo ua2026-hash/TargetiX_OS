@@ -911,7 +911,7 @@
       const triggerText = wrapper.querySelector('.selected-text');
       const optionsContainer = wrapper.querySelector('.custom-options');
       
-      if (!realSelect.options.length) return;
+      if (!realSelect || !realSelect.options.length) return;
 
       const selectedOption = realSelect.options[realSelect.selectedIndex] || realSelect.options[0];
       if (triggerText) triggerText.textContent = selectedOption.textContent;
@@ -1048,11 +1048,15 @@
     // 7. СМЕНА УСТРОЙСТВА
     function onDeviceChange() {
       const deviceSelect = document.getElementById('device-select');
+      const deviceWrapper = document.getElementById('device-select-wrapper');
       const versionSelect = document.getElementById('version-select');
       const versionWrapper = document.getElementById('version-select-wrapper');
 
       const selectedDevice = deviceSelect.value;
       localStorage.setItem('selected_device', selectedDevice);
+
+      // Синхронизируем кастомный селект с реальным <select> устройства
+      syncCustomSelect(deviceWrapper);
 
       const versions = deviceVersions[selectedDevice] || deviceVersions['dev'];
 
