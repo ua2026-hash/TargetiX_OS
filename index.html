@@ -21,25 +21,26 @@
   <!-- Шрифт Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
   <style>
     /* Современные токены UI */
     :root[data-theme="dark"] {
       --bg: #030712;
-      --card-bg: rgba(17, 24, 39, 0.7);
-      --card-border: rgba(255, 255, 255, 0.12);
-      --card-border-hover: rgba(59, 130, 246, 0.4);
+      --card-bg: rgba(15, 23, 42, 0.65);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --card-border-hover: rgba(59, 130, 246, 0.5);
       --text-main: #f9fafb;
       --text-muted: #9ca3af;
       --primary: #3b82f6;
       --primary-hover: #2563eb;
       --primary-glow: rgba(59, 130, 246, 0.35);
-      --input-bg: rgba(15, 23, 42, 0.75);
+      --input-bg: rgba(15, 23, 42, 0.85);
       --dropdown-hover: rgba(59, 130, 246, 0.15);
-      --shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.75);
-      --skeleton-bg: rgba(255, 255, 255, 0.05);
-      --inner-card-bg: rgba(15, 23, 42, 0.6);
+      --shadow: 0 35px 70px -15px rgba(0, 0, 0, 0.8);
+      --skeleton-bg: rgba(255, 255, 255, 0.03);
+      --inner-card-bg: rgba(15, 23, 42, 0.5);
+      --device-bg: linear-gradient(135deg, rgba(30, 41, 59, 0.6) 0%, rgba(15, 23, 42, 0.8) 100%);
     }
 
     :root[data-theme="light"] {
@@ -54,9 +55,10 @@
       --primary-glow: rgba(37, 99, 235, 0.25);
       --input-bg: #ffffff;
       --dropdown-hover: rgba(37, 99, 235, 0.08);
-      --shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.12);
+      --shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.08);
       --skeleton-bg: rgba(0, 0, 0, 0.04);
       --inner-card-bg: rgba(241, 245, 249, 0.8);
+      --device-bg: linear-gradient(135deg, #ffffff 0%, #e2e8f0 100%);
     }
 
     * {
@@ -66,7 +68,9 @@
     }
 
     html, body {
-      min-height: 100vh;
+      width: 100vw;
+      height: 100vh;
+      overflow-x: hidden;
     }
 
     body {
@@ -77,48 +81,51 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 24px 16px;
       position: relative;
       transition: background-color 0.3s ease, color 0.3s ease;
-      overflow-x: hidden;
+      padding: 20px;
     }
 
-    /* Фоновые светящиеся сферы */
+    /* Фоновые размытые сферы */
     .bg-glow-1 {
       position: absolute;
-      width: 600px;
-      height: 600px;
+      width: 700px;
+      height: 700px;
       background: radial-gradient(circle, var(--primary) 0%, rgba(59, 130, 246, 0) 70%);
-      filter: blur(100px);
-      opacity: 0.22;
-      top: -100px;
-      left: -100px;
+      filter: blur(120px);
+      opacity: 0.18;
+      top: -150px;
+      left: -150px;
       border-radius: 50%;
-      z-index: -1;
+      z-index: 0;
       pointer-events: none;
     }
 
     .bg-glow-2 {
       position: absolute;
-      width: 550px;
-      height: 550px;
+      width: 650px;
+      height: 650px;
       background: radial-gradient(circle, #8b5cf6 0%, rgba(139, 92, 246, 0) 70%);
-      filter: blur(100px);
-      opacity: 0.18;
-      bottom: -100px;
-      right: -100px;
+      filter: blur(120px);
+      opacity: 0.15;
+      bottom: -150px;
+      right: -150px;
       border-radius: 50%;
-      z-index: -1;
+      z-index: 0;
       pointer-events: none;
     }
 
-    /* Увеличенный главный контейнер */
+    /* Полноэкранный главный контейнер */
     .main-container {
-      max-width: 1020px;
+      max-width: 1100px;
       width: 100%;
+      height: 100%;
+      max-height: 800px;
       position: relative;
+      z-index: 1;
       display: flex;
       flex-direction: column;
+      justify-content: space-between;
       gap: 16px;
     }
 
@@ -128,13 +135,15 @@
       background: var(--card-bg);
       border: 1px solid var(--card-border);
       border-radius: 28px;
-      padding: 32px;
+      padding: 32px 40px;
       box-shadow: var(--shadow);
-      backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
       transition: all 0.3s ease;
       display: flex;
       flex-direction: column;
+      flex: 1;
+      justify-content: space-between;
       gap: 24px;
     }
 
@@ -154,21 +163,21 @@
     }
 
     .brand-icon {
-      width: 36px;
-      height: 36px;
+      width: 40px;
+      height: 40px;
       color: var(--primary);
-      filter: drop-shadow(0 0 12px var(--primary-glow));
+      filter: drop-shadow(0 0 16px var(--primary-glow));
     }
 
     h1 {
-      font-size: 24px;
+      font-size: 26px;
       font-weight: 800;
-      letter-spacing: -0.025em;
+      letter-spacing: -0.03em;
       line-height: 1.1;
     }
 
     .brand-subtitle {
-      font-size: 14px;
+      font-size: 13px;
       color: var(--text-muted);
       margin-top: 4px;
       font-weight: 500;
@@ -178,7 +187,7 @@
       background: var(--inner-card-bg);
       border: 1px solid var(--card-border);
       border-radius: 14px;
-      padding: 10px 16px;
+      padding: 10px 18px;
       color: var(--text-main);
       cursor: pointer;
       display: flex;
@@ -205,35 +214,41 @@
     /* Двухколоночная сетка */
     .card-grid {
       display: grid;
-      grid-template-columns: 320px 1fr;
-      gap: 28px;
-      align-items: start;
+      grid-template-columns: 360px 1fr;
+      gap: 32px;
+      align-items: stretch;
+      flex: 1;
     }
 
-    @media (max-width: 820px) {
-      .card-grid {
-        grid-template-columns: 1fr;
-      }
+    @media (max-width: 900px) {
+      body { height: auto; }
+      .main-container { height: auto; max-height: none; }
+      .card-grid { grid-template-columns: 1fr; }
     }
 
     /* Левая колонка */
     .left-col {
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 20px;
+      height: 100%;
+      justify-content: space-between;
     }
 
+    /* Современная карточка презентации устройства */
     .device-img-wrapper {
       position: relative;
-      border-radius: 20px;
+      border-radius: 24px;
       overflow: hidden;
       border: 1px solid var(--card-border);
-      height: 220px;
-      background-color: var(--skeleton-bg);
+      background: var(--device-bg);
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 16px;
+      padding: 24px;
+      flex: 1;
+      min-height: 240px;
+      box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.2);
     }
 
     .device-img-wrapper::before {
@@ -260,14 +275,15 @@
     }
 
     .device-img {
-      max-width: 100%;
-      max-height: 100%;
+      max-width: 90%;
+      max-height: 180px;
       object-fit: contain;
+      border-radius: 16px;
       opacity: 0;
       transition: opacity 0.4s ease, transform 0.4s ease;
       position: relative;
       z-index: 2;
-      filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.3));
+      filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.45));
     }
 
     .device-img-wrapper.loaded .device-img {
@@ -276,31 +292,31 @@
     }
 
     @keyframes float {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-6px); }
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-8px) rotate(1deg); }
     }
 
     /* Индикатор USB */
     .usb-status-card {
       background: var(--inner-card-bg);
       border: 1px solid var(--card-border);
-      border-radius: 16px;
-      padding: 14px 16px;
+      border-radius: 18px;
+      padding: 16px 20px;
       text-align: left;
     }
 
     .usb-status-header {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
       font-size: 14px;
       font-weight: 700;
     }
 
     .status-indicatorDisconnected,
     .status-indicatorConnected {
-      width: 10px;
-      height: 10px;
+      width: 12px;
+      height: 12px;
       border-radius: 50%;
       flex-shrink: 0;
       transition: background-color 0.3s ease, box-shadow 0.3s ease;
@@ -313,13 +329,13 @@
 
     .status-indicatorConnected {
       background-color: #10b981;
-      box-shadow: 0 0 12px rgba(16, 185, 129, 0.8);
+      box-shadow: 0 0 14px rgba(16, 185, 129, 0.8);
       animation: pulse-green 2s infinite;
     }
 
     @keyframes pulse-green {
       0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.6); }
-      70% { box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+      70% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
       100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
     }
 
@@ -338,13 +354,14 @@
     .right-col {
       display: flex;
       flex-direction: column;
-      gap: 18px;
+      gap: 20px;
+      justify-content: space-between;
     }
 
     .form-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 14px;
+      gap: 16px;
     }
 
     @media (max-width: 520px) {
@@ -359,11 +376,11 @@
     }
 
     label {
-      font-size: 12px;
-      font-weight: 700;
+      font-size: 11px;
+      font-weight: 800;
       color: var(--text-muted);
       text-transform: uppercase;
-      letter-spacing: 0.06em;
+      letter-spacing: 0.08em;
       display: block;
       margin-bottom: 8px;
     }
@@ -380,8 +397,8 @@
 
     .custom-select-trigger {
       width: 100%;
-      padding: 12px 16px;
-      border-radius: 14px;
+      padding: 14px 18px;
+      border-radius: 16px;
       border: 1px solid var(--card-border);
       background: var(--input-bg);
       color: var(--text-main);
@@ -404,8 +421,8 @@
     }
 
     .custom-select-trigger .arrow {
-      width: 16px;
-      height: 16px;
+      width: 18px;
+      height: 18px;
       stroke: var(--text-muted);
       transition: transform 0.2s ease;
       flex-shrink: 0;
@@ -418,24 +435,24 @@
 
     .custom-options {
       position: absolute;
-      top: calc(100% + 6px);
+      top: calc(100% + 8px);
       left: 0;
       right: 0;
       background: var(--card-bg);
       border: 1px solid var(--card-border);
-      border-radius: 14px;
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
-      backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
+      border-radius: 16px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
       opacity: 0;
       visibility: hidden;
       pointer-events: none;
-      transform: translateY(-6px);
+      transform: translateY(-8px);
       transition: all 0.2s ease;
       z-index: 50;
       overflow: hidden;
-      padding: 6px;
-      max-height: 200px;
+      padding: 8px;
+      max-height: 220px;
       overflow-y: auto;
     }
 
@@ -447,11 +464,11 @@
     }
 
     .custom-option {
-      padding: 10px 12px;
+      padding: 12px 14px;
       font-size: 13px;
-      font-weight: 500;
+      font-weight: 600;
       color: var(--text-main);
-      border-radius: 10px;
+      border-radius: 12px;
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -484,19 +501,21 @@
     .changelog-card {
       background: var(--inner-card-bg);
       border: 1px solid var(--card-border);
-      border-radius: 16px;
-      padding: 16px;
+      border-radius: 18px;
+      padding: 18px 20px;
       text-align: left;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 14px;
+      flex: 1;
+      min-height: 150px;
     }
 
     .changelog-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding-bottom: 10px;
+      padding-bottom: 12px;
       border-bottom: 1px solid var(--card-border);
     }
 
@@ -520,7 +539,7 @@
     .version-badge {
       font-size: 11px;
       font-weight: 800;
-      padding: 3px 10px;
+      padding: 4px 10px;
       border-radius: 20px;
       background: var(--primary-glow);
       color: var(--primary);
@@ -531,7 +550,7 @@
       display: flex;
       flex-direction: column;
       gap: 10px;
-      max-height: 130px;
+      max-height: 140px;
       overflow-y: auto;
       padding-right: 6px;
       transition: opacity 0.15s ease;
@@ -552,19 +571,19 @@
     .changelog-item {
       display: flex;
       align-items: flex-start;
-      gap: 8px;
+      gap: 10px;
       font-size: 13px;
-      line-height: 1.45;
+      line-height: 1.5;
     }
 
     .tag {
       font-size: 10px;
       font-weight: 800;
-      padding: 2px 6px;
-      border-radius: 6px;
+      padding: 3px 8px;
+      border-radius: 8px;
       text-transform: uppercase;
       flex-shrink: 0;
-      margin-top: 2px;
+      margin-top: 1px;
     }
 
     .tag-feat { background: rgba(16, 185, 129, 0.2); color: #10b981; }
@@ -578,28 +597,29 @@
 
     /* Кнопка прошивки */
     esp-web-install-button {
-      margin-top: 6px;
+      margin-top: 4px;
     }
 
     esp-web-install-button button {
       background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
       color: #ffffff;
       border: none;
-      padding: 14px 20px;
-      font-size: 15px;
+      padding: 16px 24px;
+      font-size: 16px;
       font-weight: 700;
       font-family: inherit;
-      border-radius: 14px;
+      border-radius: 16px;
       cursor: pointer;
       width: 100%;
       transition: all 0.25s ease;
-      box-shadow: 0 8px 25px var(--primary-glow);
+      box-shadow: 0 10px 30px var(--primary-glow);
+      letter-spacing: -0.01em;
     }
 
     esp-web-install-button button:hover {
       transform: translateY(-2px);
-      box-shadow: 0 12px 30px var(--primary-glow);
-      filter: brightness(1.05);
+      box-shadow: 0 15px 35px var(--primary-glow);
+      filter: brightness(1.08);
     }
 
     esp-web-install-button button:active {
@@ -608,7 +628,7 @@
 
     .unsupported-msg {
       color: #ef4444;
-      font-size: 12px;
+      font-size: 13px;
       display: block;
       margin-top: 6px;
       font-weight: 500;
@@ -620,7 +640,7 @@
       color: var(--text-muted);
       font-weight: 500;
       opacity: 0.8;
-      margin-top: 8px;
+      padding-top: 8px;
     }
   </style>
 
@@ -661,7 +681,7 @@
         <!-- Левая колонка -->
         <div class="left-col">
           <div class="device-img-wrapper" id="img-wrapper">
-            <img src="device_dev.png" alt="TargetiX" class="device-img" id="device-img">
+            <img src="device_dev.png" alt="TargetiX Device" class="device-img" id="device-img">
           </div>
 
           <div class="usb-status-card" id="usb-status-card">
