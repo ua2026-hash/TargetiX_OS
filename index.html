@@ -260,6 +260,11 @@
       box-shadow: 0 0 0 3px var(--primary-glow);
     }
 
+    .custom-select-trigger:focus-visible {
+      outline: 2px solid var(--primary);
+      outline-offset: 2px;
+    }
+
     .custom-select-trigger .arrow {
       width: 16px;
       height: 16px;
@@ -336,25 +341,157 @@
       opacity: 1;
     }
 
-    .changelog {
+    /* Индикатор USB */
+    .usb-status-card {
       background: var(--input-bg);
       border: 1px solid var(--card-border);
       border-radius: 12px;
-      padding: 14px 16px;
+      padding: 12px 14px;
+      margin-bottom: 18px;
       text-align: left;
-      font-size: 13px;
-      color: var(--text-muted);
-      margin-bottom: 24px;
-      line-height: 1.5;
+      transition: all 0.3s ease;
     }
 
-    .changelog strong {
-      color: var(--text-main);
-      display: block;
-      margin-bottom: 6px;
+    .usb-status-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
       font-weight: 600;
     }
 
+    .status-indicatorDisconnected,
+    .status-indicatorConnected {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .status-indicatorDisconnected {
+      background-color: #ef4444;
+      box-shadow: 0 0 8px rgba(239, 68, 68, 0.5);
+    }
+
+    .status-indicatorConnected {
+      background-color: #10b981;
+      box-shadow: 0 0 10px rgba(16, 185, 129, 0.7);
+      animation: pulse-green 2s infinite;
+    }
+
+    @keyframes pulse-green {
+      0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.6); }
+      70% { box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+    }
+
+    .usb-hint {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 6px;
+      line-height: 1.4;
+    }
+
+    .usb-hint strong {
+      color: var(--primary);
+    }
+
+    /* Современный блок Changelog */
+    .changelog-card {
+      background: var(--input-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 16px 18px;
+      text-align: left;
+      margin-bottom: 24px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .changelog-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    .changelog-title-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .changelog-icon {
+      width: 18px;
+      height: 18px;
+      stroke: var(--primary);
+      flex-shrink: 0;
+    }
+
+    .changelog-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-main);
+      letter-spacing: -0.01em;
+    }
+
+    .version-badge {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 20px;
+      background: var(--primary-glow);
+      color: var(--primary);
+      border: 1px solid rgba(59, 130, 246, 0.2);
+    }
+
+    .changelog-body {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.4;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+
+    .changelog-body.updating {
+      opacity: 0;
+      transform: translateY(4px);
+    }
+
+    .changelog-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .tag {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .tag-feat { background: rgba(16, 185, 129, 0.15); color: #10b981; }
+    .tag-fix  { background: rgba(239, 68, 68, 0.15); color: #ef4444; }
+    .tag-impr { background: rgba(59, 130, 246, 0.15); color: #3b82f6; }
+    .tag-dev  { background: rgba(245, 158, 11, 0.15); color: #f59e0b; }
+
+    .changelog-text-content {
+      color: var(--text-main);
+      font-weight: 400;
+    }
+
+    /* Кнопка и предупреждение */
     esp-web-install-button button {
       background: var(--primary);
       color: #ffffff;
@@ -418,7 +555,7 @@
 
       <!-- Выбор модели устройства -->
       <div class="form-group">
-        <label>Модель устройства</label>
+        <label id="device-label">Модель устройства</label>
         <div class="custom-select-wrapper" id="device-select-wrapper">
           <select id="device-select" onchange="onDeviceChange()">
             <option value="dev" data-manifest="manifest_dev.json" data-img="device_dev.png">TargetiX_DEV</option>
@@ -429,38 +566,63 @@
             <option value="sl5" data-manifest="manifest_sl5.json" data-img="device_sl5.png">TargetiX_SL5</option>
           </select>
 
-          <div class="custom-select-trigger">
+          <div class="custom-select-trigger" tabindex="0" role="combobox" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="device-label">
             <span class="selected-text">TargetiX_DEV</span>
             <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <polyline points="6 9 12 15 18 9"></polyline>
             </svg>
           </div>
 
-          <div class="custom-options"></div>
+          <div class="custom-options" role="listbox"></div>
         </div>
       </div>
 
       <!-- Выбор версии ПО -->
       <div class="form-group">
-        <label>Версия ПО</label>
+        <label id="version-label">Версия ПО</label>
         <div class="custom-select-wrapper" id="version-select-wrapper">
           <select id="version-select" onchange="updateManifest()"></select>
 
-          <div class="custom-select-trigger">
+          <div class="custom-select-trigger" tabindex="0" role="combobox" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="version-label">
             <span class="selected-text">Загрузка...</span>
             <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <polyline points="6 9 12 15 18 9"></polyline>
             </svg>
           </div>
 
-          <div class="custom-options"></div>
+          <div class="custom-options" role="listbox"></div>
         </div>
       </div>
 
-      <!-- Changelog -->
-      <div class="changelog" id="changelog-box">
-        <strong id="changelog-title">Статус ПО:</strong>
-        <span id="changelog-text">Загрузка...</span>
+      <!-- Индикатор USB и подсказка по BOOT -->
+      <div class="usb-status-card" id="usb-status-card">
+        <div class="usb-status-header">
+          <div class="status-indicatorDisconnected" id="usb-indicator"></div>
+          <span class="status-text" id="usb-status-text">USB-устройство не обнаружено</span>
+        </div>
+        <p class="usb-hint" id="usb-hint">
+          Подключите плату через USB-кабель. Если устройство не определяется, зажмите кнопку <strong>BOOT</strong> при подключении.
+        </p>
+      </div>
+
+      <!-- Современный блок Changelog -->
+      <div class="changelog-card" id="changelog-card">
+        <div class="changelog-header">
+          <div class="changelog-title-group">
+            <svg class="changelog-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
+              <polyline points="14 2 14 8 20 8"/>
+              <path d="M12 18v-6"/>
+              <path d="M9 15l3 3 3-3"/>
+            </svg>
+            <span class="changelog-title" id="changelog-title">Статус ПО</span>
+          </div>
+          <span class="version-badge" id="changelog-version-badge">v1.0.0</span>
+        </div>
+
+        <div class="changelog-body" id="changelog-content">
+          <!-- Сюда динамически генерируются пункты -->
+        </div>
       </div>
 
       <!-- Кнопка прошивки -->
@@ -478,16 +640,11 @@
   </div>
 
   <script>
-    // По умолчанию глобальные данные о версиях пусты
     let deviceVersions = {};
 
-    // 1. ДИНАМИЧЕСКАЯ ЗАГРУЗКА ВЕРСИЙ ИЗ versions.json ИЛИ С GITHUB
+    // 1. ДИНАМИЧЕСКАЯ ЗАГРУЗКА ВЕРСИЙ
     async function loadDynamicVersions() {
-      const changelogText = document.getElementById('changelog-text');
-      changelogText.textContent = 'Получение актуальных версий ПО...';
-
       try {
-        // Пробуем загрузить внешнюю конфигурацию versions.json
         const res = await fetch('versions.json?t=' + Date.now());
         if (!res.ok) throw new Error('Файл versions.json не найден');
         deviceVersions = await res.json();
@@ -495,6 +652,7 @@
         console.warn('Не удалось загрузить versions.json, переходим на резервную конфигурацию...');
         setFallbackVersions();
       } finally {
+        restoreSavedDevice();
         onDeviceChange();
       }
     }
@@ -503,17 +661,25 @@
       const devInDev = [{
         value: 'dev',
         label: 'В разработке',
-        changelog: '• Прошивка находится в процессе разработки.<br>• Следите за обновлениями!'
+        changes: [
+          { type: 'dev', text: 'Прошивка находится в процессе активной разработки.' },
+          { type: 'dev', text: 'Следите за обновлениями в официальном репозитории!' }
+        ]
       }];
 
       deviceVersions = {
-        dev: devInDev,
-        sl1: devInDev,
-        sl2: devInDev,
-        sl3: devInDev,
-        sl4: devInDev,
-        sl5: devInDev
+        dev: devInDev, sl1: devInDev, sl2: devInDev,
+        sl3: devInDev, sl4: devInDev, sl5: devInDev
       };
+    }
+
+    // Сохранение и восстановление выбора устройства
+    function restoreSavedDevice() {
+      const deviceSelect = document.getElementById('device-select');
+      const savedDevice = localStorage.getItem('selected_device');
+      if (savedDevice && deviceSelect.querySelector(`option[value="${savedDevice}"]`)) {
+        deviceSelect.value = savedDevice;
+      }
     }
 
     // 2. ОБРАБОТКА ИНДИКАТОРА ЗАГРУЗКИ ФОТО
@@ -561,17 +727,24 @@
       updateThemeUI(newTheme);
     });
 
-    // 4. ИНИЦИАЛИЗАЦИЯ И РЕНДЕР КАСТОМНОГО ДРОПДАУНА
+    // 4. ИНИЦИАЛИЗАЦИЯ И РЕНДЕР КАСТОМНОГО ДРОПДАУНА (С ДОСТУПНОСТЬЮ ДЛЯ КЛАВИАТУРЫ)
     function initCustomSelect(wrapper) {
       const realSelect = wrapper.querySelector('select');
       const optionsContainer = wrapper.querySelector('.custom-options');
+      const trigger = wrapper.querySelector('.custom-select-trigger');
       
       optionsContainer.innerHTML = '';
 
       Array.from(realSelect.options).forEach((opt, index) => {
         const optionEl = document.createElement('div');
         optionEl.classList.add('custom-option');
-        if (index === realSelect.selectedIndex) optionEl.classList.add('selected');
+        optionEl.setAttribute('role', 'option');
+        if (index === realSelect.selectedIndex) {
+          optionEl.classList.add('selected');
+          optionEl.setAttribute('aria-selected', 'true');
+        } else {
+          optionEl.setAttribute('aria-selected', 'false');
+        }
         
         optionEl.innerHTML = `
           <span>${opt.textContent}</span>
@@ -584,7 +757,7 @@
           e.stopPropagation();
           realSelect.selectedIndex = index;
           syncCustomSelect(wrapper);
-          wrapper.classList.remove('open');
+          closeDropdown(wrapper);
           realSelect.dispatchEvent(new Event('change'));
         });
 
@@ -608,25 +781,117 @@
       customOptions.forEach((optEl, idx) => {
         if (idx === realSelect.selectedIndex) {
           optEl.classList.add('selected');
+          optEl.setAttribute('aria-selected', 'true');
         } else {
           optEl.classList.remove('selected');
+          optEl.setAttribute('aria-selected', 'false');
         }
       });
     }
 
-    // 5. СОБЫТИЯ И ИНИЦИАЛИЗАЦИЯ
+    function openDropdown(wrapper) {
+      const trigger = wrapper.querySelector('.custom-select-trigger');
+      wrapper.classList.add('open');
+      trigger.setAttribute('aria-expanded', 'true');
+    }
+
+    function closeDropdown(wrapper) {
+      const trigger = wrapper.querySelector('.custom-select-trigger');
+      wrapper.classList.remove('open');
+      trigger.setAttribute('aria-expanded', 'false');
+    }
+
+    // 5. ИНДИКАТОР ПОДКЛЮЧЕНИЯ USB (WEB SERIAL API)
+    function initUSBTracking() {
+      const indicator = document.getElementById('usb-indicator');
+      const statusText = document.getElementById('usb-status-text');
+      const usbHint = document.getElementById('usb-hint');
+
+      if (!('serial' in navigator)) {
+        indicator.className = 'status-indicatorDisconnected';
+        statusText.textContent = 'Web Serial API не поддерживается';
+        usbHint.textContent = 'Ваш браузер не поддерживает работу с COM-портами. Используйте Chrome или Edge.';
+        return;
+      }
+
+      async function checkPorts() {
+        try {
+          const ports = await navigator.serial.getPorts();
+          if (ports.length > 0) setConnectedState();
+          else setDisconnectedState();
+        } catch (e) {
+          console.warn('Ошибка проверки портов:', e);
+        }
+      }
+
+      function setConnectedState() {
+        indicator.className = 'status-indicatorConnected';
+        statusText.textContent = 'USB-устройство подключено';
+        usbHint.innerHTML = 'Плату можно прошивать. Если процесс не начинается — зажмите кнопку <strong>BOOT</strong>.';
+      }
+
+      function setDisconnectedState() {
+        indicator.className = 'status-indicatorDisconnected';
+        statusText.textContent = 'USB-устройство не обнаружено';
+        usbHint.innerHTML = 'Подключите плату через USB-кабель. Если устройство не определяется, зажмите кнопку <strong>BOOT</strong> при подключении.';
+      }
+
+      navigator.serial.addEventListener('connect', setConnectedState);
+      navigator.serial.addEventListener('disconnect', setDisconnectedState);
+      checkPorts();
+    }
+
+    // 6. СОБЫТИЯ И ИНИЦИАЛИЗАЦИЯ
     document.addEventListener('DOMContentLoaded', () => {
       const wrappers = document.querySelectorAll('.custom-select-wrapper');
 
       wrappers.forEach(wrapper => {
         const trigger = wrapper.querySelector('.custom-select-trigger');
+        const realSelect = wrapper.querySelector('select');
 
         trigger.addEventListener('click', (e) => {
           e.stopPropagation();
-          wrappers.forEach(w => {
-            if (w !== wrapper) w.classList.remove('open');
-          });
-          wrapper.classList.toggle('open');
+          const isOpen = wrapper.classList.contains('open');
+          wrappers.forEach(w => closeDropdown(w));
+          if (!isOpen) openDropdown(wrapper);
+        });
+
+        // Навигация с клавиатуры
+        trigger.addEventListener('keydown', (e) => {
+          if (['ArrowDown', 'ArrowUp', 'Enter', 'Space', 'Escape'].includes(e.code)) {
+            e.preventDefault();
+          }
+
+          if (e.code === 'Escape') {
+            closeDropdown(wrapper);
+            return;
+          }
+
+          if (e.code === 'Enter' || e.code === 'Space') {
+            if (wrapper.classList.contains('open')) {
+              closeDropdown(wrapper);
+            } else {
+              wrappers.forEach(w => closeDropdown(w));
+              openDropdown(wrapper);
+            }
+            return;
+          }
+
+          if (e.code === 'ArrowDown' || e.code === 'ArrowUp') {
+            if (!wrapper.classList.contains('open')) {
+              openDropdown(wrapper);
+            }
+            const count = realSelect.options.length;
+            if (count === 0) return;
+
+            let nextIdx = realSelect.selectedIndex + (e.code === 'ArrowDown' ? 1 : -1);
+            if (nextIdx < 0) nextIdx = 0;
+            if (nextIdx >= count) nextIdx = count - 1;
+
+            realSelect.selectedIndex = nextIdx;
+            syncCustomSelect(wrapper);
+            realSelect.dispatchEvent(new Event('change'));
+          }
         });
 
         initCustomSelect(wrapper);
@@ -634,33 +899,32 @@
 
       document.addEventListener('click', (e) => {
         wrappers.forEach(wrapper => {
-          if (!wrapper.contains(e.target)) {
-            wrapper.classList.remove('open');
-          }
+          if (!wrapper.contains(e.target)) closeDropdown(wrapper);
         });
       });
 
-      // Загружаем данные динамически
+      initUSBTracking();
       loadDynamicVersions();
     });
 
-    // 6. ФУНКЦИЯ ОБНОВЛЕНИЯ ВЕРСИЙ ПРИ СМЕНЕ УСТРОЙСТВА
+    // 7. ФУНКЦИЯ ОБНОВЛЕНИЯ ВЕРСИЙ ПРИ СМЕНЕ УСТРОЙСТВА
     function onDeviceChange() {
       const deviceSelect = document.getElementById('device-select');
       const versionSelect = document.getElementById('version-select');
       const versionWrapper = document.getElementById('version-select-wrapper');
 
       const selectedDevice = deviceSelect.value;
+      localStorage.setItem('selected_device', selectedDevice);
+
       const versions = deviceVersions[selectedDevice] || deviceVersions['dev'];
 
-      // Заполняем <option> для элемента версий
       versionSelect.innerHTML = '';
       if (versions) {
         versions.forEach(v => {
           const opt = document.createElement('option');
           opt.value = v.value;
           opt.textContent = v.label;
-          opt.setAttribute('data-changelog', v.changelog);
+          if (v.changelog) opt.setAttribute('data-changelog', v.changelog);
           if (v.manifest) opt.setAttribute('data-manifest', v.manifest);
           versionSelect.appendChild(opt);
         });
@@ -670,48 +934,83 @@
       updateManifest();
     }
 
-    // 7. ФУНКЦИЯ ОБНОВЛЕНИЯ МАНИФЕСТА И CHANGELOG
+    // 8. ФУНКЦИЯ ОБНОВЛЕНИЯ МАНИФЕСТА И CHANGELOG
     function updateManifest() {
       const deviceSelect = document.getElementById('device-select');
       const versionSelect = document.getElementById('version-select');
       const installer = document.getElementById('installer');
-      const changelogText = document.getElementById('changelog-text');
+      
       const changelogTitle = document.getElementById('changelog-title');
+      const changelogBadge = document.getElementById('changelog-version-badge');
+      const changelogContent = document.getElementById('changelog-content');
 
       const selectedDeviceOpt = deviceSelect.options[deviceSelect.selectedIndex];
       const selectedVersionOpt = versionSelect.options[versionSelect.selectedIndex];
 
       if (!selectedDeviceOpt || !selectedVersionOpt) return;
 
-      // Манифест может задаваться как на уровне версии, так и на уровне устройства
       const versionManifest = selectedVersionOpt.getAttribute('data-manifest');
       const deviceManifest = selectedDeviceOpt.getAttribute('data-manifest');
       const manifestPath = versionManifest || deviceManifest || 'manifest_dev.json';
 
       installer.setAttribute('manifest', manifestPath);
 
-      // Смена картинки при выборе устройства
       const newImgSrc = selectedDeviceOpt.getAttribute('data-img');
       if (newImgSrc && deviceImg.getAttribute('src') !== newImgSrc) {
         imgWrapper.classList.remove('loaded');
         deviceImg.src = newImgSrc;
       }
 
-      // Смена changelog и скрытие кнопки при "dev"
-      const changelog = selectedVersionOpt.getAttribute('data-changelog');
-      const versionValue = selectedVersionOpt.value;
-      
-      if (versionValue === 'dev') {
-        changelogTitle.textContent = 'Статус ПО:';
-        installer.style.display = 'none';
-      } else {
-        changelogTitle.textContent = `Что нового в v${versionValue}:`;
-        installer.style.display = 'block';
-      }
+      changelogContent.classList.add('updating');
 
-      if (changelog) {
-        changelogText.innerHTML = changelog;
-      }
+      setTimeout(() => {
+        const selectedDevice = deviceSelect.value;
+        const selectedVersionVal = versionSelect.value;
+        
+        const versions = deviceVersions[selectedDevice] || [];
+        const currentVersionObj = versions.find(v => v.value === selectedVersionVal);
+
+        if (selectedVersionVal === 'dev') {
+          changelogTitle.textContent = 'Статус разработки';
+          changelogBadge.textContent = 'DEV';
+          changelogBadge.style.display = 'inline-block';
+          installer.style.display = 'none';
+        } else {
+          changelogTitle.textContent = 'Что нового';
+          changelogBadge.textContent = `v${selectedVersionVal}`;
+          changelogBadge.style.display = 'inline-block';
+          installer.style.display = 'block';
+        }
+
+        changelogContent.innerHTML = '';
+
+        if (currentVersionObj && Array.isArray(currentVersionObj.changes)) {
+          currentVersionObj.changes.forEach(change => {
+            const item = document.createElement('div');
+            item.className = 'changelog-item';
+
+            let tagHTML = '';
+            if (change.type === 'feat') tagHTML = '<span class="tag tag-feat">NEW</span>';
+            else if (change.type === 'fix') tagHTML = '<span class="tag tag-fix">FIX</span>';
+            else if (change.type === 'impr') tagHTML = '<span class="tag tag-impr">IMPR</span>';
+            else if (change.type === 'dev') tagHTML = '<span class="tag tag-dev">INFO</span>';
+
+            item.innerHTML = `
+              ${tagHTML}
+              <span class="changelog-text-content">${change.text}</span>
+            `;
+            changelogContent.appendChild(item);
+          });
+        } else {
+          const rawChangelog = selectedVersionOpt.getAttribute('data-changelog') || 'Описание отсутствует.';
+          const item = document.createElement('div');
+          item.className = 'changelog-item';
+          item.innerHTML = `<span class="changelog-text-content">${rawChangelog}</span>`;
+          changelogContent.appendChild(item);
+        }
+
+        changelogContent.classList.remove('updating');
+      }, 150);
     }
   </script>
 
