@@ -124,7 +124,7 @@
       max-width: 1100px;
       width: 100%;
       height: 100%;
-      max-height: 820px;
+      max-height: 880px;
       position: relative;
       z-index: 1;
       display: flex;
@@ -219,7 +219,7 @@
       gap: 32px;
       align-items: stretch;
       flex: 1;
-      min-height: 0; /* Дозволяє flex/grid коректно обробляти висоту внутрішніх елементів */
+      min-height: 0;
     }
 
     @media (max-width: 900px) {
@@ -255,7 +255,6 @@
       transition: border-color 0.4s ease, box-shadow 0.4s ease;
     }
 
-    /* Лазерний сканер при підключенні */
     .scanner-line {
       position: absolute;
       top: -100%;
@@ -279,7 +278,6 @@
       100% { top: -10%; }
     }
 
-    /* Ефект аури навколо пристрою при підключенні */
     .device-stage.connected {
       border-color: rgba(16, 185, 129, 0.4);
       box-shadow: 0 0 30px rgba(16, 185, 129, 0.15), inset 0 0 30px rgba(16, 185, 129, 0.05);
@@ -324,7 +322,6 @@
       50% { transform: translateY(-8px) rotate(0.8deg); }
     }
 
-    /* Анімована лінія живлення/даних */
     .data-cable-connector {
       position: absolute;
       bottom: 0;
@@ -342,7 +339,6 @@
       height: 40px;
     }
 
-    /* Картка USB статусу */
     .usb-status-card {
       background: var(--inner-card-bg);
       border: 1px solid var(--card-border);
@@ -408,7 +404,6 @@
       gap: 8px;
     }
 
-    /* Живий пульсуючий індикатор */
     .status-dot {
       width: 8px;
       height: 8px;
@@ -457,7 +452,7 @@
       gap: 20px;
       justify-content: space-between;
       height: 100%;
-      min-height: 0; /* Захищає від переповнення контейнера */
+      min-height: 0;
     }
 
     .form-row {
@@ -596,20 +591,20 @@
     }
 
     /* -------------------------------------------------------------
-       ОНОВЛЕНИЙ CHANGELOG СТИЛЬ ТА СТАБІЛЬНА СМУГА ПРОКРУТКИ
+       ОНОВЛЕНИЙ CHANGELOG СТИЛЬ (ЗБІЛЬШЕНА РАМКА — ВАРІАНТ 1)
     ------------------------------------------------------------- */
     .changelog-card {
       background: var(--inner-card-bg);
       border: 1px solid var(--card-border);
       border-radius: 18px;
-      padding: 18px 20px;
+      padding: 22px 24px;
       text-align: left;
       display: flex;
       flex-direction: column;
       gap: 14px;
       flex: 1;
-      min-height: 180px;
-      max-height: 240px; /* Обмеження висоти всієї картки changelog */
+      min-height: 220px;
+      max-height: 360px; /* <--- ЗБІЛЬШЕНО З 240px ДО 360px */
       overflow: hidden;
     }
 
@@ -649,7 +644,6 @@
       border: 1px solid rgba(59, 130, 246, 0.3);
     }
 
-    /* Контейнер списку змін із кастомною та динамічною прокруткою */
     .changelog-body {
       display: flex;
       flex-direction: column;
@@ -660,7 +654,7 @@
       transition: opacity 0.15s ease;
     }
 
-    /* Стилізація смуги прокрутки для Webkit (Chrome, Edge, Safari) */
+    /* Webkit Scrollbar */
     .changelog-body::-webkit-scrollbar {
       width: 6px;
     }
@@ -675,7 +669,7 @@
       background: var(--scrollbar-thumb-hover);
     }
 
-    /* Стилізація для Firefox */
+    /* Firefox Scrollbar */
     .changelog-body {
       scrollbar-width: thin;
       scrollbar-color: var(--scrollbar-thumb) transparent;
@@ -888,7 +882,7 @@
             </div>
           </div>
 
-          <!-- Changelog -->
+          <!-- Changelog Картка (Збільшена) -->
           <div class="changelog-card" id="changelog-card">
             <div class="changelog-header">
               <div class="changelog-title-group">
@@ -929,6 +923,49 @@
 
   <script>
     let deviceVersions = {};
+
+    // -------------------------------------------------------------
+    // КАСТОМНИЙ ЗВУК ПІДКЛЮЧЕННЯ (Web Audio API)
+    // -------------------------------------------------------------
+    function playConnectSound() {
+      try {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContext) return;
+        
+        const ctx = new AudioContext();
+        const now = ctx.currentTime;
+
+        // Генерація підтверджувального двотонального футуристичного звуку
+        const osc1 = ctx.createOscillator();
+        const osc2 = ctx.createOscillator();
+        const gain = ctx.createGain();
+
+        osc1.type = 'sine';
+        osc2.type = 'triangle';
+
+        // Перша нота -> Друга нота (зростаючий тон)
+        osc1.frequency.setValueAtTime(520, now);
+        osc1.frequency.exponentialRampToValueAtTime(880, now + 0.12);
+
+        osc2.frequency.setValueAtTime(1040, now);
+        osc2.frequency.exponentialRampToValueAtTime(1760, now + 0.12);
+
+        gain.gain.setValueAtTime(0.01, now);
+        gain.gain.linearRampToValueAtTime(0.15, now + 0.03);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+
+        osc1.connect(gain);
+        osc2.connect(gain);
+        gain.connect(ctx.destination);
+
+        osc1.start(now);
+        osc2.start(now);
+        osc1.stop(now + 0.25);
+        osc2.stop(now + 0.25);
+      } catch (e) {
+        console.warn('Неможливо відтворити аудіо:', e);
+      }
+    }
 
     // 1. ДИНАМІЧНЕ ЗАВАНТАЖЕННЯ ВЕРСІЙ
     async function loadDynamicVersions() {
@@ -1087,7 +1124,7 @@
       trigger.setAttribute('aria-expanded', 'false');
     }
 
-    // 5. ІНДИКАТОР ПІДКЛЮЧЕННЯ USB (АНІМОВАНИЙ СТАН)
+    // 5. ІНДИКАТОР ПІДКЛЮЧЕННЯ USB (ЗІ ЗВУКОВИМ ЕФЕКТОМ)
     function initUSBTracking() {
       const statusCard = document.getElementById('usb-status-card');
       const statusText = document.getElementById('usb-status-text');
@@ -1104,18 +1141,19 @@
       async function checkPorts() {
         try {
           const ports = await navigator.serial.getPorts();
-          if (ports.length > 0) setConnectedState();
+          if (ports.length > 0) setConnectedState(false);
           else setDisconnectedState();
         } catch (e) {
           console.warn('Помилка перевірки портів:', e);
         }
       }
 
-      function setConnectedState() {
+      function setConnectedState(playSound = true) {
         statusCard.className = 'usb-status-card status-connected';
         deviceStage.className = 'device-stage connected loaded';
         statusText.textContent = 'USB підключено';
         usbHint.innerHTML = 'Пристрій готовий. Затисніть <strong>BOOT</strong> при збоях.';
+        if (playSound) playConnectSound();
       }
 
       function setDisconnectedState() {
@@ -1125,7 +1163,7 @@
         usbHint.innerHTML = 'Затисніть кнопку <strong>BOOT</strong> при підключенні USB.';
       }
 
-      navigator.serial.addEventListener('connect', setConnectedState);
+      navigator.serial.addEventListener('connect', () => setConnectedState(true));
       navigator.serial.addEventListener('disconnect', setDisconnectedState);
       checkPorts();
     }
@@ -1319,7 +1357,6 @@
           changelogContent.appendChild(item);
         }
 
-        // Завжди повертаємо скролл на початок при зміні версії
         changelogContent.scrollTop = 0;
         changelogContent.classList.remove('updating');
       }, 100);
