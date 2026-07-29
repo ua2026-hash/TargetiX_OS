@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="ru" data-theme="dark">
+<html lang="uk" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TargetiX OS — Прошивка устройства</title>
+  <title>TargetiX OS — Прошивка пристрою</title>
 
-  <!-- Скрипт мгновенной установки темы -->
+  <!-- Скрипт миттєвого встановлення теми -->
   <script>
     (function() {
       const savedTheme = localStorage.getItem('theme');
@@ -24,7 +24,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
   <style>
-    /* Современные токены UI */
+    /* Сучасні токени UI */
     :root[data-theme="dark"] {
       --bg: #030712;
       --card-bg: rgba(15, 23, 42, 0.65);
@@ -86,7 +86,7 @@
       padding: 20px;
     }
 
-    /* Фоновые размытые сферы */
+    /* Фонові розмиті сфери */
     .bg-glow-1 {
       position: absolute;
       width: 700px;
@@ -115,12 +115,12 @@
       pointer-events: none;
     }
 
-    /* Полноэкранный главный контейнер */
+    /* Повноекранний головний контейнер */
     .main-container {
       max-width: 1100px;
       width: 100%;
       height: 100%;
-      max-height: 800px;
+      max-height: 820px;
       position: relative;
       z-index: 1;
       display: flex;
@@ -129,7 +129,7 @@
       gap: 16px;
     }
 
-    /* Главная стеклянная карточка */
+    /* Головна скляна картка */
     .card {
       position: relative;
       background: var(--card-bg);
@@ -147,7 +147,7 @@
       gap: 24px;
     }
 
-    /* Шапка карточки */
+    /* Шапка картки */
     .card-header {
       display: flex;
       align-items: center;
@@ -211,7 +211,7 @@
       fill: none;
     }
 
-    /* Двухколоночная сетка */
+    /* Двоколонкова сітка */
     .card-grid {
       display: grid;
       grid-template-columns: 360px 1fr;
@@ -226,7 +226,7 @@
       .card-grid { grid-template-columns: 1fr; }
     }
 
-    /* Левая колонка */
+    /* Ліва колонка */
     .left-col {
       display: flex;
       flex-direction: column;
@@ -235,7 +235,7 @@
       justify-content: space-between;
     }
 
-    /* Современная карточка презентации устройства */
+    /* Картка презентації пристрою */
     .device-img-wrapper {
       position: relative;
       border-radius: 24px;
@@ -296,7 +296,7 @@
       50% { transform: translateY(-8px) rotate(1deg); }
     }
 
-    /* Индикатор USB */
+    /* Індикатор USB */
     .usb-status-card {
       background: var(--inner-card-bg);
       border: 1px solid var(--card-border);
@@ -350,7 +350,7 @@
       color: var(--primary);
     }
 
-    /* Правая колонка */
+    /* Права колонка */
     .right-col {
       display: flex;
       flex-direction: column;
@@ -385,7 +385,7 @@
       margin-bottom: 8px;
     }
 
-    /* Кастомный селект */
+    /* Кастомний селект */
     .custom-select-wrapper {
       position: relative;
       user-select: none;
@@ -497,7 +497,7 @@
       opacity: 1;
     }
 
-    /* Changelog */
+    /* Changelog Card */
     .changelog-card {
       background: var(--inner-card-bg);
       border: 1px solid var(--card-border);
@@ -508,7 +508,7 @@
       flex-direction: column;
       gap: 14px;
       flex: 1;
-      min-height: 150px;
+      min-height: 180px;
     }
 
     .changelog-header {
@@ -532,8 +532,8 @@
     }
 
     .changelog-title {
-      font-size: 14px;
-      font-weight: 700;
+      font-size: 15px;
+      font-weight: 800;
     }
 
     .version-badge {
@@ -549,8 +549,8 @@
     .changelog-body {
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      max-height: 140px;
+      gap: 12px;
+      max-height: 170px;
       overflow-y: auto;
       padding-right: 6px;
       transition: opacity 0.15s ease;
@@ -568,31 +568,50 @@
       opacity: 0;
     }
 
-    .changelog-item {
+    /* Категорії та списки в Changelog */
+    .changelog-section {
       display: flex;
-      align-items: flex-start;
-      gap: 10px;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .changelog-section-title {
       font-size: 13px;
-      line-height: 1.5;
+      font-weight: 700;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
 
-    .tag {
-      font-size: 10px;
-      font-weight: 800;
-      padding: 3px 8px;
-      border-radius: 8px;
-      text-transform: uppercase;
-      flex-shrink: 0;
-      margin-top: 1px;
+    .changelog-list {
+      list-style: none;
+      padding-left: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
     }
 
-    .tag-feat { background: rgba(16, 185, 129, 0.2); color: #10b981; }
-    .tag-fix  { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
-    .tag-impr { background: rgba(59, 130, 246, 0.2); color: #3b82f6; }
-    .tag-dev  { background: rgba(245, 158, 11, 0.2); color: #f59e0b; }
-
-    .changelog-text-content {
+    .changelog-list-item {
+      font-size: 13px;
+      line-height: 1.45;
       color: var(--text-main);
+      position: relative;
+      padding-left: 14px;
+    }
+
+    .changelog-list-item::before {
+      content: "•";
+      position: absolute;
+      left: 2px;
+      color: var(--text-muted);
+    }
+
+    .changelog-item {
+      font-size: 13px;
+      color: var(--text-main);
+      line-height: 1.4;
     }
 
     /* Кнопка прошивки */
@@ -665,20 +684,20 @@
           </svg>
           <div>
             <h1>TargetiX OS</h1>
-            <div class="brand-subtitle">Подключите устройство через USB для загрузки ПО</div>
+            <div class="brand-subtitle">Підключіть пристрій через USB для завантаження ПЗ</div>
           </div>
         </div>
 
-        <button class="theme-toggle-btn" id="theme-toggle" title="Сменить тему">
+        <button class="theme-toggle-btn" id="theme-toggle" title="Змінити тему">
           <svg id="theme-icon" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></svg>
-          <span id="theme-text">Тёмная</span>
+          <span id="theme-text">Темна</span>
         </button>
       </div>
 
-      <!-- Главная сетка -->
+      <!-- Головна сітка -->
       <div class="card-grid">
         
-        <!-- Левая колонка -->
+        <!-- Ліва колонка -->
         <div class="left-col">
           <div class="device-img-wrapper" id="img-wrapper">
             <img src="device_dev.png" alt="TargetiX Device" class="device-img" id="device-img">
@@ -687,19 +706,19 @@
           <div class="usb-status-card" id="usb-status-card">
             <div class="usb-status-header">
               <div class="status-indicatorDisconnected" id="usb-indicator"></div>
-              <span id="usb-status-text">Устройство не найдено</span>
+              <span id="usb-status-text">Пристрій не знайдено</span>
             </div>
             <p class="usb-hint" id="usb-hint">
-              Если устройство не определяется, зажмите <strong>BOOT</strong> при подключении.
+              Якщо пристрій не визначається, затисніть <strong>BOOT</strong> при підключенні.
             </p>
           </div>
         </div>
 
-        <!-- Правая колонка -->
+        <!-- Права колонка -->
         <div class="right-col">
           
           <div class="form-row">
-            <!-- Выбор модели -->
+            <!-- Вибір моделі -->
             <div class="form-group">
               <label id="device-label">Модель</label>
               <div class="custom-select-wrapper" id="device-select-wrapper">
@@ -723,14 +742,14 @@
               </div>
             </div>
 
-            <!-- Выбор версии ПО -->
+            <!-- Вибір версії ПЗ -->
             <div class="form-group">
-              <label id="version-label">Версия ПО</label>
+              <label id="version-label">Версія ПЗ</label>
               <div class="custom-select-wrapper" id="version-select-wrapper">
                 <select id="version-select" onchange="updateManifest()"></select>
 
                 <div class="custom-select-trigger" tabindex="0" role="combobox" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="version-label">
-                  <span class="selected-text">Загрузка...</span>
+                  <span class="selected-text">Завантаження...</span>
                   <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <polyline points="6 9 12 15 18 9"></polyline>
                   </svg>
@@ -751,21 +770,21 @@
                   <path d="M12 18v-6"/>
                   <path d="M9 15l3 3 3-3"/>
                 </svg>
-                <span class="changelog-title" id="changelog-title">Статус ПО</span>
+                <span class="changelog-title" id="changelog-title">Що нового</span>
               </div>
               <span class="version-badge" id="changelog-version-badge">v1.0.0</span>
             </div>
 
             <div class="changelog-body" id="changelog-content">
-              <!-- Сюда динамически генерируются пункты -->
+              <!-- Сюди динамічно ґенеруються блоки -->
             </div>
           </div>
 
           <!-- Кнопка прошивки -->
           <esp-web-install-button id="installer" manifest="manifest_dev.json">
-            <button slot="activate">Подключить и прошить</button>
+            <button slot="activate">Підключити та прошити</button>
             <span slot="unsupported" class="unsupported-msg">
-              ⚠️ Нужен Chrome, Edge или Brave на ПК (Web Serial API).
+              ⚠️ Потрібен Chrome, Edge або Brave на ПК (Web Serial API).
             </span>
           </esp-web-install-button>
 
@@ -783,14 +802,14 @@
   <script>
     let deviceVersions = {};
 
-    // 1. ДИНАМИЧЕСКАЯ ЗАГРУЗКА ВЕРСИЙ
+    // 1. ДИНАМІЧНЕ ЗАВАНТАЖЕННЯ ВЕРСІЙ
     async function loadDynamicVersions() {
       try {
         const res = await fetch('versions.json?t=' + Date.now());
-        if (!res.ok) throw new Error('Файл versions.json не найден');
+        if (!res.ok) throw new Error('Файл versions.json не знайдено');
         deviceVersions = await res.json();
       } catch (e) {
-        console.warn('Резервная конфигурация версий...');
+        console.warn('Резервна конфігурація версій...');
         setFallbackVersions();
       } finally {
         restoreSavedDevice();
@@ -801,10 +820,10 @@
     function setFallbackVersions() {
       const devInDev = [{
         value: 'dev',
-        label: 'В разработке',
+        label: 'В розробці',
         changes: [
-          { type: 'dev', text: 'Прошивка находится в процессе активной разработки.' },
-          { type: 'dev', text: 'Следите за обновлениями в официальном репозитории!' }
+          { type: 'dev', text: 'Прошивка перебуває в процесі активної розробки.' },
+          { type: 'dev', text: 'Слідкуйте за оновленнями в офіційному репозиторії!' }
         ]
       }];
 
@@ -822,7 +841,7 @@
       }
     }
 
-    // 2. ОБРАБОТКА ИНДИКАТОРА ЗАГРУЗКИ ФОТО
+    // 2. ОБРОБКА ІНДИКАТОРА ЗАВАНТАЖЕННЯ ФОТО
     const imgWrapper = document.getElementById('img-wrapper');
     const deviceImg = document.getElementById('device-img');
 
@@ -837,7 +856,7 @@
       deviceImg.addEventListener('error', handleImageLoad);
     }
 
-    // 3. ПЕРЕКЛЮЧАТЕЛЬ ТЕМЫ (DARK / LIGHT)
+    // 3. ПЕРЕМИКАЧ ТЕМИ (DARK / LIGHT)
     const themeBtn = document.getElementById('theme-toggle');
     const themeIcon = document.getElementById('theme-icon');
     const themeText = document.getElementById('theme-text');
@@ -849,10 +868,10 @@
     function updateThemeUI(theme) {
       if (theme === 'light') {
         themeIcon.innerHTML = moonIcon;
-        themeText.textContent = 'Тёмная';
+        themeText.textContent = 'Темна';
       } else {
         themeIcon.innerHTML = sunIcon;
-        themeText.textContent = 'Светлая';
+        themeText.textContent = 'Світла';
       }
     }
 
@@ -867,7 +886,7 @@
       updateThemeUI(newTheme);
     });
 
-    // 4. ИНИЦИАЛИЗАЦИЯ И РЕНДЕР КАСТОМНОГО ДРОПДАУНА
+    // 4. ІНІЦІАЛІЗАЦІЯ ТА РЕНДЕР КАСТОМНОГО ДРОПДАУНУ
     function initCustomSelect(wrapper) {
       const realSelect = wrapper.querySelector('select');
       const optionsContainer = wrapper.querySelector('.custom-options');
@@ -940,7 +959,7 @@
       trigger.setAttribute('aria-expanded', 'false');
     }
 
-    // 5. ИНДИКАТОР ПОДКЛЮЧЕНИЯ USB (WEB SERIAL API)
+    // 5. ІНДИКАТОР ПІДКЛЮЧЕННЯ USB (WEB SERIAL API)
     function initUSBTracking() {
       const indicator = document.getElementById('usb-indicator');
       const statusText = document.getElementById('usb-status-text');
@@ -948,8 +967,8 @@
 
       if (!('serial' in navigator)) {
         indicator.className = 'status-indicatorDisconnected';
-        statusText.textContent = 'API не поддерживается';
-        usbHint.textContent = 'Используйте Chrome или Edge на компьютере.';
+        statusText.textContent = 'API не підтримується';
+        usbHint.textContent = 'Використовуйте Chrome або Edge на комп\'ютері.';
         return;
       }
 
@@ -959,20 +978,20 @@
           if (ports.length > 0) setConnectedState();
           else setDisconnectedState();
         } catch (e) {
-          console.warn('Ошибка проверки портов:', e);
+          console.warn('Помилка перевірки портів:', e);
         }
       }
 
       function setConnectedState() {
         indicator.className = 'status-indicatorConnected';
-        statusText.textContent = 'USB подключено';
-        usbHint.innerHTML = 'Готово к прошивке. Зажмите <strong>BOOT</strong>, если не стартует.';
+        statusText.textContent = 'USB підключено';
+        usbHint.innerHTML = 'Готово до прошивки. Затисніть <strong>BOOT</strong>, якщо не стартує.';
       }
 
       function setDisconnectedState() {
         indicator.className = 'status-indicatorDisconnected';
-        statusText.textContent = 'Устройство не найдено';
-        usbHint.innerHTML = 'Зажмите кнопку <strong>BOOT</strong> при подключении USB кабеля.';
+        statusText.textContent = 'Пристрій не знайдено';
+        usbHint.innerHTML = 'Затисніть кнопку <strong>BOOT</strong> при підключенні USB кабелю.';
       }
 
       navigator.serial.addEventListener('connect', setConnectedState);
@@ -980,7 +999,7 @@
       checkPorts();
     }
 
-    // 6. СОБЫТИЯ И ИНИЦИАЛИЗАЦИЯ
+    // 6. ПОДІЇ ТА ІНІЦІАЛІЗАЦІЯ
     document.addEventListener('DOMContentLoaded', () => {
       const wrappers = document.querySelectorAll('.custom-select-wrapper');
 
@@ -1045,7 +1064,7 @@
       loadDynamicVersions();
     });
 
-    // 7. СМЕНА УСТРОЙСТВА
+    // 7. ЗМІНА МОДЕЛІ ПРИСТРОЮ
     function onDeviceChange() {
       const deviceSelect = document.getElementById('device-select');
       const deviceWrapper = document.getElementById('device-select-wrapper');
@@ -1055,7 +1074,7 @@
       const selectedDevice = deviceSelect.value;
       localStorage.setItem('selected_device', selectedDevice);
 
-      // Полная перезагрузка/отрисовка списка опций UI для селекта устройств
+      // Синхронізуємо кастомний випадаючий список для моделей
       initCustomSelect(deviceWrapper);
 
       const versions = deviceVersions[selectedDevice] || deviceVersions['dev'];
@@ -1076,7 +1095,7 @@
       updateManifest();
     }
 
-    // 8. ОБНОВЛЕНИЕ МАНИФЕСТА И CHANGELOG
+    // 8. ОБНОВЛЕННЯ МАНІФЕСТУ ТА CHANGELOG
     function updateManifest() {
       const deviceSelect = document.getElementById('device-select');
       const versionSelect = document.getElementById('version-select');
@@ -1113,12 +1132,12 @@
         const currentVersionObj = versions.find(v => v.value === selectedVersionVal);
 
         if (selectedVersionVal === 'dev') {
-          changelogTitle.textContent = 'Разработка';
+          changelogTitle.textContent = 'Розробка';
           changelogBadge.textContent = 'DEV';
           changelogBadge.style.display = 'inline-block';
           installer.style.display = 'none';
         } else {
-          changelogTitle.textContent = 'Что нового';
+          changelogTitle.textContent = `🆕 Що нового у версії ${selectedVersionVal}`;
           changelogBadge.textContent = `v${selectedVersionVal}`;
           changelogBadge.style.display = 'inline-block';
           installer.style.display = 'block';
@@ -1127,24 +1146,46 @@
         changelogContent.innerHTML = '';
 
         if (currentVersionObj && Array.isArray(currentVersionObj.changes)) {
+          
+          // Категорії змін
+          const categories = {
+            feat: { title: '🚀 Нові можливості', items: [] },
+            fix:  { title: '🐛 Виправлення помилок', items: [] },
+            impr: { title: '🎨 UI/UX покращення', items: [] },
+            tech: { title: '🔧 Технічні покращення', items: [] },
+            dev:  { title: 'ℹ️ Інформація', items: [] }
+          };
+
           currentVersionObj.changes.forEach(change => {
-            const item = document.createElement('div');
-            item.className = 'changelog-item';
-
-            let tagHTML = '';
-            if (change.type === 'feat') tagHTML = '<span class="tag tag-feat">NEW</span>';
-            else if (change.type === 'fix') tagHTML = '<span class="tag tag-fix">FIX</span>';
-            else if (change.type === 'impr') tagHTML = '<span class="tag tag-impr">IMPR</span>';
-            else if (change.type === 'dev') tagHTML = '<span class="tag tag-dev">INFO</span>';
-
-            item.innerHTML = `
-              ${tagHTML}
-              <span class="changelog-text-content">${change.text}</span>
-            `;
-            changelogContent.appendChild(item);
+            if (categories[change.type]) {
+              categories[change.type].items.push(change.text);
+            } else {
+              categories.impr.items.push(change.text);
+            }
           });
+
+          // Рендеримо за категоріями
+          Object.keys(categories).forEach(catKey => {
+            const cat = categories[catKey];
+            if (cat.items.length > 0) {
+              const section = document.createElement('div');
+              section.className = 'changelog-section';
+
+              let itemsHTML = cat.items
+                .map(text => `<li class="changelog-list-item">${text}</li>`)
+                .join('');
+
+              section.innerHTML = `
+                <div class="changelog-section-title">${cat.title}</div>
+                <ul class="changelog-list">${itemsHTML}</ul>
+              `;
+
+              changelogContent.appendChild(section);
+            }
+          });
+
         } else {
-          const rawChangelog = selectedVersionOpt.getAttribute('data-changelog') || 'Описание отсутствует.';
+          const rawChangelog = selectedVersionOpt.getAttribute('data-changelog') || 'Опис відсутній.';
           const item = document.createElement('div');
           item.className = 'changelog-item';
           item.innerHTML = `<span class="changelog-text-content">${rawChangelog}</span>`;
