@@ -1055,8 +1055,8 @@
       const selectedDevice = deviceSelect.value;
       localStorage.setItem('selected_device', selectedDevice);
 
-      // Синхронизируем кастомный селект с реальным <select> устройства
-      syncCustomSelect(deviceWrapper);
+      // Полная перезагрузка/отрисовка списка опций UI для селекта устройств
+      initCustomSelect(deviceWrapper);
 
       const versions = deviceVersions[selectedDevice] || deviceVersions['dev'];
 
