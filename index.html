@@ -104,6 +104,7 @@
       border-radius: 50%;
       z-index: 0;
       pointer-events: none;
+      will-change: transform;
     }
 
     .bg-glow-2 {
@@ -118,6 +119,7 @@
       border-radius: 50%;
       z-index: 0;
       pointer-events: none;
+      will-change: transform;
     }
 
     .main-container {
@@ -236,7 +238,7 @@
       justify-content: space-between;
     }
 
-    /* ФУТУРИСТИЧНИЙ БЛОК ПРИСТРОЮ ТА USB СТАНУ */
+    /* ФУТУРИСТИЧНИЙ БЛОК ПРИСТРОЮ ТА USB СТАНУ (ОПТИМІЗОВАНИЙ ДЛЯ GPU) */
     .device-stage {
       position: relative;
       border-radius: 24px;
@@ -251,11 +253,13 @@
       min-height: 250px;
       overflow: hidden;
       transition: border-color 0.4s ease, box-shadow 0.4s ease;
+      will-change: transform, border-color, box-shadow;
+      transform: translate3d(0,0,0);
     }
 
     .scanner-line {
       position: absolute;
-      top: -100%;
+      top: 0;
       left: 0;
       right: 0;
       height: 3px;
@@ -263,17 +267,19 @@
       box-shadow: 0 0 15px var(--status-success);
       opacity: 0;
       z-index: 5;
+      will-change: transform, opacity;
+      transform: translate3d(0, -20px, 0);
     }
 
     .device-stage.connected .scanner-line {
-      animation: scan 2.5s ease-in-out infinite;
-      opacity: 0.8;
+      animation: scan 2.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+      opacity: 0.85;
     }
 
     @keyframes scan {
-      0% { top: -10%; }
-      50% { top: 110%; }
-      100% { top: -10%; }
+      0% { transform: translate3d(0, 0, 0); }
+      50% { transform: translate3d(0, 260px, 0); }
+      100% { transform: translate3d(0, 0, 0); }
     }
 
     .device-stage.connected {
@@ -300,24 +306,26 @@
       object-fit: contain;
       border-radius: 16px;
       opacity: 0;
-      transition: opacity 0.4s ease, transform 0.4s ease, filter 0.4s ease;
+      transition: opacity 0.4s ease, filter 0.4s ease;
       position: relative;
       z-index: 2;
       filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.45));
+      will-change: transform, filter;
+      transform: translate3d(0, 0, 0);
     }
 
     .device-stage.loaded .device-img {
       opacity: 1;
-      animation: float 6s ease-in-out infinite;
+      animation: float 5s ease-in-out infinite;
     }
 
     .device-stage.connected .device-img {
-      filter: drop-shadow(0 15px 30px rgba(16, 185, 129, 0.3));
+      filter: drop-shadow(0 15px 30px rgba(16, 185, 129, 0.35));
     }
 
     @keyframes float {
-      0%, 100% { transform: translateY(0px) rotate(0deg); }
-      50% { transform: translateY(-8px) rotate(0.8deg); }
+      0%, 100% { transform: translate3d(0, 0px, 0) rotate(0deg); }
+      50% { transform: translate3d(0, -6px, 0) rotate(0.5deg); }
     }
 
     .data-cable-connector {
@@ -325,16 +333,17 @@
       bottom: 0;
       left: 50%;
       transform: translateX(-50%);
-      width: 2px;
+      width: 3px;
       height: 0;
       background: linear-gradient(to top, var(--primary), var(--status-success));
       box-shadow: 0 0 10px var(--status-success);
-      transition: height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: height 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
       z-index: 3;
+      will-change: height;
     }
 
     .device-stage.connected .data-cable-connector {
-      height: 40px;
+      height: 38px;
     }
 
     .usb-status-card {
@@ -841,6 +850,7 @@
               <label id="device-label">Модель</label>
               <div class="custom-select-wrapper" id="device-select-wrapper">
                 <select id="device-select" onchange="onDeviceChange()">
+                  <option value="ukraine" data-manifest="manifest_ukraine.json" data-img="device_ukraine.png">TargetiX UKRAINE</option>
                   <option value="dev" data-manifest="manifest_dev.json" data-img="device_dev.png">TargetiX_DEV</option>
                   <option value="sl1" data-manifest="manifest_sl1.json" data-img="device_sl1.png">TargetiX_SL1</option>
                   <option value="sl2" data-manifest="manifest_sl2.json" data-img="device_sl2.png">TargetiX_SL2</option>
@@ -850,7 +860,7 @@
                 </select>
 
                 <div class="custom-select-trigger" tabindex="0" role="combobox" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="device-label">
-                  <span class="selected-text">TargetiX_DEV</span>
+                  <span class="selected-text">TargetiX UKRAINE</span>
                   <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <polyline points="6 9 12 15 18 9"></polyline>
                   </svg>
@@ -878,7 +888,7 @@
             </div>
           </div>
 
-          <!-- Changelog Картка (Збільшена) -->
+          <!-- Changelog Картка -->
           <div class="changelog-card" id="changelog-card">
             <div class="changelog-header">
               <div class="changelog-title-group">
@@ -899,7 +909,7 @@
           </div>
 
           <!-- Кнопка прошивки -->
-          <esp-web-install-button id="installer" manifest="manifest_dev.json">
+          <esp-web-install-button id="installer" manifest="manifest_ukraine.json">
             <button slot="activate">Підключити та прошити</button>
             <span slot="unsupported" class="unsupported-msg">
               ⚠️ Потрібен Chrome, Edge або Brave на ПК (Web Serial API).
@@ -921,7 +931,7 @@
     let deviceVersions = {};
 
     // -------------------------------------------------------------
-    // ЗВУКОВІ ЕФЕКТИ ПІДКЛЮЧЕННЯ ТА ВІДКЛЮЧЕННЯ (Web Audio API)
+    // ЗВУКОВІ ЕФЕКТИ (З ЛЕГКОЮ ПАУЗОЮ ЩОБ НЕ БЛОКУВАТИ UI)
     // -------------------------------------------------------------
     let audioCtx = null;
 
@@ -936,74 +946,71 @@
       return audioCtx;
     }
 
-    // 🟢 Звук підключення (приємний зростаючий мажорний аккорд)
     function playConnectSound() {
-      try {
-        const ctx = getAudioContext();
-        if (!ctx) return;
+      requestAnimationFrame(() => {
+        try {
+          const ctx = getAudioContext();
+          if (!ctx) return;
 
-        const now = ctx.currentTime;
+          const now = ctx.currentTime;
+          const osc1 = ctx.createOscillator();
+          const osc2 = ctx.createOscillator();
+          const gain = ctx.createGain();
 
-        const osc1 = ctx.createOscillator();
-        const osc2 = ctx.createOscillator();
-        const gain = ctx.createGain();
+          osc1.type = 'sine';
+          osc2.type = 'sine';
 
-        osc1.type = 'sine';
-        osc2.type = 'sine';
+          osc1.frequency.setValueAtTime(659.25, now);
+          osc1.frequency.exponentialRampToValueAtTime(987.77, now + 0.08);
 
-        // Підйом тональності (E5 -> B5)
-        osc1.frequency.setValueAtTime(659.25, now);
-        osc1.frequency.exponentialRampToValueAtTime(987.77, now + 0.08);
+          osc2.frequency.setValueAtTime(987.77, now);
+          osc2.frequency.exponentialRampToValueAtTime(1318.51, now + 0.1);
 
-        osc2.frequency.setValueAtTime(987.77, now);
-        osc2.frequency.exponentialRampToValueAtTime(1318.51, now + 0.1);
+          gain.gain.setValueAtTime(0.001, now);
+          gain.gain.linearRampToValueAtTime(0.18, now + 0.02);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.3);
 
-        gain.gain.setValueAtTime(0.001, now);
-        gain.gain.linearRampToValueAtTime(0.18, now + 0.02);
-        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.3);
+          osc1.connect(gain);
+          osc2.connect(gain);
+          gain.connect(ctx.destination);
 
-        osc1.connect(gain);
-        osc2.connect(gain);
-        gain.connect(ctx.destination);
-
-        osc1.start(now);
-        osc2.start(now);
-        osc1.stop(now + 0.3);
-        osc2.stop(now + 0.3);
-      } catch (e) {
-        console.warn('Помилка відтворення звуку підключення:', e);
-      }
+          osc1.start(now);
+          osc2.start(now);
+          osc1.stop(now + 0.3);
+          osc2.stop(now + 0.3);
+        } catch (e) {
+          console.warn('Помилка відтворення звуку:', e);
+        }
+      });
     }
 
-    // 🔴 Звук відключення (м'який спадаючий тон)
     function playDisconnectSound() {
-      try {
-        const ctx = getAudioContext();
-        if (!ctx) return;
+      requestAnimationFrame(() => {
+        try {
+          const ctx = getAudioContext();
+          if (!ctx) return;
 
-        const now = ctx.currentTime;
+          const now = ctx.currentTime;
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
 
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(783.99, now);
+          osc.frequency.exponentialRampToValueAtTime(523.25, now + 0.12);
 
-        osc.type = 'triangle';
+          gain.gain.setValueAtTime(0.001, now);
+          gain.gain.linearRampToValueAtTime(0.15, now + 0.015);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.22);
 
-        // Спадання тональності (G5 -> C5)
-        osc.frequency.setValueAtTime(783.99, now);
-        osc.frequency.exponentialRampToValueAtTime(523.25, now + 0.12);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
 
-        gain.gain.setValueAtTime(0.001, now);
-        gain.gain.linearRampToValueAtTime(0.15, now + 0.015);
-        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.22);
-
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-
-        osc.start(now);
-        osc.stop(now + 0.22);
-      } catch (e) {
-        console.warn('Помилка відтворення звуку відключення:', e);
-      }
+          osc.start(now);
+          osc.stop(now + 0.22);
+        } catch (e) {
+          console.warn('Помилка відтворення звуку:', e);
+        }
+      });
     }
 
     // 1. ДИНАМІЧНЕ ЗАВАНТАЖЕННЯ ВЕРСІЙ
@@ -1032,7 +1039,7 @@
       }];
 
       deviceVersions = {
-        dev: devInDev, sl1: devInDev, sl2: devInDev,
+        ukraine: devInDev, dev: devInDev, sl1: devInDev, sl2: devInDev,
         sl3: devInDev, sl4: devInDev, sl5: devInDev
       };
     }
@@ -1060,7 +1067,7 @@
       deviceImg.addEventListener('error', handleImageLoad);
     }
 
-    // 3. ПЕРЕМИКАЧ ТЕМИ (DARK / LIGHT)
+    // 3. ПЕРЕМИКАЧ ТЕМИ
     const themeBtn = document.getElementById('theme-toggle');
     const themeIcon = document.getElementById('theme-icon');
     const themeText = document.getElementById('theme-text');
@@ -1090,7 +1097,7 @@
       updateThemeUI(newTheme);
     });
 
-    // 4. ІНІЦІАЛІЗАЦІЯ ТА РЕНДЕР КАСТОМНОГО ДРОПДАУНУ
+    // 4. ІНІЦІАЛІЗАЦІЯ ДРОПДАУНУ
     function initCustomSelect(wrapper) {
       const realSelect = wrapper.querySelector('select');
       const optionsContainer = wrapper.querySelector('.custom-options');
@@ -1163,7 +1170,7 @@
       trigger.setAttribute('aria-expanded', 'false');
     }
 
-    // 5. ІНДИКАТОР ПІДКЛЮЧЕННЯ USB ТА ВІДСТЕЖЕННЯ ПОДІЙ
+    // 5. ОПТИМІЗОВАНИЙ ІНДИКАТОР ПІДКЛЮЧЕННЯ USB ТА АВТО-АВТОДОДАННЯ TARGETIX UKRAINE
     function initUSBTracking() {
       const statusCard = document.getElementById('usb-status-card');
       const statusText = document.getElementById('usb-status-text');
@@ -1180,31 +1187,61 @@
       async function checkPorts() {
         try {
           const ports = await navigator.serial.getPorts();
-          if (ports.length > 0) setConnectedState(false);
-          else setDisconnectedState(false);
+          if (ports.length > 0) {
+            let matchedName = "TargetiX UKRAINE";
+            
+            // Якщо пристрій повідомляє свої дані, намагаємося прочитати Info або за замовчуванням ставимо TargetiX UKRAINE
+            try {
+              const info = ports[0].getInfo();
+              if (info.usbVendorId) {
+                matchedName = "TargetiX UKRAINE";
+              }
+            } catch(e) {}
+
+            setConnectedState(matchedName, false);
+          } else {
+            setDisconnectedState(false);
+          }
         } catch (e) {
           console.warn('Помилка перевірки портів:', e);
         }
       }
 
-      function setConnectedState(playSound = true) {
-        statusCard.className = 'usb-status-card status-connected';
-        deviceStage.className = 'device-stage connected loaded';
-        statusText.textContent = 'USB підключено';
-        usbHint.innerHTML = 'Пристрій готовий. Затисніть <strong>BOOT</strong> при збоях.';
-        if (playSound) playConnectSound();
+      function setConnectedState(deviceName = "TargetiX UKRAINE", playSound = true) {
+        requestAnimationFrame(() => {
+          statusCard.className = 'usb-status-card status-connected';
+          deviceStage.className = 'device-stage connected loaded';
+          statusText.textContent = `${deviceName} підключено`;
+          usbHint.innerHTML = 'Пристрій готовий до роботи. Затисніть <strong>BOOT</strong> при збоях.';
+
+          // Автоматично вибираємо "TargetiX UKRAINE" в списку, якщо підключено пристрій
+          const deviceSelect = document.getElementById('device-select');
+          if (deviceSelect && deviceSelect.value !== 'ukraine') {
+            deviceSelect.value = 'ukraine';
+            onDeviceChange();
+          }
+
+          if (playSound) playConnectSound();
+        });
       }
 
       function setDisconnectedState(playSound = true) {
-        statusCard.className = 'usb-status-card status-disconnected';
-        deviceStage.className = 'device-stage disconnected loaded';
-        statusText.textContent = 'Пристрій не знайдено';
-        usbHint.innerHTML = 'Затисніть кнопку <strong>BOOT</strong> при підключенні USB.';
-        if (playSound) playDisconnectSound();
+        requestAnimationFrame(() => {
+          statusCard.className = 'usb-status-card status-disconnected';
+          deviceStage.className = 'device-stage disconnected loaded';
+          statusText.textContent = 'Пристрій не знайдено';
+          usbHint.innerHTML = 'Затисніть кнопку <strong>BOOT</strong> при підключенні USB.';
+          if (playSound) playDisconnectSound();
+        });
       }
 
-      navigator.serial.addEventListener('connect', () => setConnectedState(true));
-      navigator.serial.addEventListener('disconnect', () => setDisconnectedState(true));
+      navigator.serial.addEventListener('connect', (e) => {
+        setConnectedState("TargetiX UKRAINE", true);
+      });
+
+      navigator.serial.addEventListener('disconnect', () => {
+        setDisconnectedState(true);
+      });
       
       checkPorts();
     }
@@ -1286,7 +1323,7 @@
 
       initCustomSelect(deviceWrapper);
 
-      const versions = deviceVersions[selectedDevice] || deviceVersions['dev'];
+      const versions = deviceVersions[selectedDevice] || deviceVersions['ukraine'] || deviceVersions['dev'];
 
       versionSelect.innerHTML = '';
       if (versions) {
@@ -1321,7 +1358,7 @@
 
       const versionManifest = selectedVersionOpt.getAttribute('data-manifest');
       const deviceManifest = selectedDeviceOpt.getAttribute('data-manifest');
-      const manifestPath = versionManifest || deviceManifest || 'manifest_dev.json';
+      const manifestPath = versionManifest || deviceManifest || 'manifest_ukraine.json';
 
       installer.setAttribute('manifest', manifestPath);
 
