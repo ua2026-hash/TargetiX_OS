@@ -822,7 +822,7 @@
             <div class="data-cable-connector"></div>
           </div>
 
-          <!-- Оновлена Картка USB статусу -->
+          <!-- Картка USB статусу -->
           <div class="usb-status-card status-disconnected" id="usb-status-card">
             <div class="usb-icon-box">
               <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -850,7 +850,6 @@
               <label id="device-label">Модель</label>
               <div class="custom-select-wrapper" id="device-select-wrapper">
                 <select id="device-select" onchange="onDeviceChange()">
-                  <option value="ukraine" data-manifest="manifest_ukraine.json" data-img="device_ukraine.png">TargetiX UKRAINE</option>
                   <option value="dev" data-manifest="manifest_dev.json" data-img="device_dev.png">TargetiX_DEV</option>
                   <option value="sl1" data-manifest="manifest_sl1.json" data-img="device_sl1.png">TargetiX_SL1</option>
                   <option value="sl2" data-manifest="manifest_sl2.json" data-img="device_sl2.png">TargetiX_SL2</option>
@@ -860,7 +859,7 @@
                 </select>
 
                 <div class="custom-select-trigger" tabindex="0" role="combobox" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="device-label">
-                  <span class="selected-text">TargetiX UKRAINE</span>
+                  <span class="selected-text">TargetiX_DEV</span>
                   <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <polyline points="6 9 12 15 18 9"></polyline>
                   </svg>
@@ -909,7 +908,7 @@
           </div>
 
           <!-- Кнопка прошивки -->
-          <esp-web-install-button id="installer" manifest="manifest_ukraine.json">
+          <esp-web-install-button id="installer" manifest="manifest_dev.json">
             <button slot="activate">Підключити та прошити</button>
             <span slot="unsupported" class="unsupported-msg">
               ⚠️ Потрібен Chrome, Edge або Brave на ПК (Web Serial API).
@@ -931,7 +930,7 @@
     let deviceVersions = {};
 
     // -------------------------------------------------------------
-    // ЗВУКОВІ ЕФЕКТИ (З ЛЕГКОЮ ПАУЗОЮ ЩОБ НЕ БЛОКУВАТИ UI)
+    // ЗВУКОВІ ЕФЕКТИ
     // -------------------------------------------------------------
     let audioCtx = null;
 
@@ -1039,7 +1038,7 @@
       }];
 
       deviceVersions = {
-        ukraine: devInDev, dev: devInDev, sl1: devInDev, sl2: devInDev,
+        dev: devInDev, sl1: devInDev, sl2: devInDev,
         sl3: devInDev, sl4: devInDev, sl5: devInDev
       };
     }
@@ -1170,7 +1169,7 @@
       trigger.setAttribute('aria-expanded', 'false');
     }
 
-    // 5. ОПТИМІЗОВАНИЙ ІНДИКАТОР ПІДКЛЮЧЕННЯ USB ТА АВТО-АВТОДОДАННЯ TARGETIX UKRAINE
+    // 5. ОПТИМІЗОВАНИЙ ІНДИКАТОР ПІДКЛЮЧЕННЯ USB
     function initUSBTracking() {
       const statusCard = document.getElementById('usb-status-card');
       const statusText = document.getElementById('usb-status-text');
@@ -1188,13 +1187,12 @@
         try {
           const ports = await navigator.serial.getPorts();
           if (ports.length > 0) {
-            let matchedName = "TargetiX UKRAINE";
+            let matchedName = "TargetiX Device";
             
-            // Якщо пристрій повідомляє свої дані, намагаємося прочитати Info або за замовчуванням ставимо TargetiX UKRAINE
             try {
               const info = ports[0].getInfo();
               if (info.usbVendorId) {
-                matchedName = "TargetiX UKRAINE";
+                matchedName = "TargetiX Device";
               }
             } catch(e) {}
 
@@ -1207,19 +1205,12 @@
         }
       }
 
-      function setConnectedState(deviceName = "TargetiX UKRAINE", playSound = true) {
+      function setConnectedState(deviceName = "TargetiX Device", playSound = true) {
         requestAnimationFrame(() => {
           statusCard.className = 'usb-status-card status-connected';
           deviceStage.className = 'device-stage connected loaded';
           statusText.textContent = `${deviceName} підключено`;
           usbHint.innerHTML = 'Пристрій готовий до роботи. Затисніть <strong>BOOT</strong> при збоях.';
-
-          // Автоматично вибираємо "TargetiX UKRAINE" в списку, якщо підключено пристрій
-          const deviceSelect = document.getElementById('device-select');
-          if (deviceSelect && deviceSelect.value !== 'ukraine') {
-            deviceSelect.value = 'ukraine';
-            onDeviceChange();
-          }
 
           if (playSound) playConnectSound();
         });
@@ -1235,8 +1226,8 @@
         });
       }
 
-      navigator.serial.addEventListener('connect', (e) => {
-        setConnectedState("TargetiX UKRAINE", true);
+      navigator.serial.addEventListener('connect', () => {
+        setConnectedState("TargetiX Device", true);
       });
 
       navigator.serial.addEventListener('disconnect', () => {
@@ -1323,7 +1314,7 @@
 
       initCustomSelect(deviceWrapper);
 
-      const versions = deviceVersions[selectedDevice] || deviceVersions['ukraine'] || deviceVersions['dev'];
+      const versions = deviceVersions[selectedDevice] || deviceVersions['dev'];
 
       versionSelect.innerHTML = '';
       if (versions) {
@@ -1358,7 +1349,7 @@
 
       const versionManifest = selectedVersionOpt.getAttribute('data-manifest');
       const deviceManifest = selectedDeviceOpt.getAttribute('data-manifest');
-      const manifestPath = versionManifest || deviceManifest || 'manifest_ukraine.json';
+      const manifestPath = versionManifest || deviceManifest || 'manifest_dev.json';
 
       installer.setAttribute('manifest', manifestPath);
 
