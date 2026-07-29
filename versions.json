@@ -12,6 +12,7 @@
     {
       "value": "2.7",
       "label": "v2.7",
+      "manifest": "manifest_sl1_v2.7.json",
       "changes": [
         { "type": "impr", "text": "Оновлено зовнішній вигляд та інтерфейс у сучасному стилі." }
       ]
@@ -19,6 +20,7 @@
     {
       "value": "2.6",
       "label": "v2.6",
+      "manifest": "manifest_sl1.json",
       "changes": [
         { "type": "impr", "text": "Базовий реліз версії v2.6 для TargetiX SL1." }
       ]
