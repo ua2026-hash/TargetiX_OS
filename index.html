@@ -42,6 +42,8 @@
       --device-bg: radial-gradient(circle at center, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.95) 100%);
       --status-success: #10b981;
       --status-error: #ef4444;
+      --scrollbar-thumb: rgba(255, 255, 255, 0.15);
+      --scrollbar-thumb-hover: rgba(255, 255, 255, 0.3);
     }
 
     :root[data-theme="light"] {
@@ -61,6 +63,8 @@
       --device-bg: radial-gradient(circle at center, #ffffff 0%, #e2e8f0 100%);
       --status-success: #059669;
       --status-error: #dc2626;
+      --scrollbar-thumb: rgba(0, 0, 0, 0.15);
+      --scrollbar-thumb-hover: rgba(0, 0, 0, 0.3);
     }
 
     * {
@@ -215,6 +219,7 @@
       gap: 32px;
       align-items: stretch;
       flex: 1;
+      min-height: 0; /* Дозволяє flex/grid коректно обробляти висоту внутрішніх елементів */
     }
 
     @media (max-width: 900px) {
@@ -451,6 +456,8 @@
       flex-direction: column;
       gap: 20px;
       justify-content: space-between;
+      height: 100%;
+      min-height: 0; /* Захищає від переповнення контейнера */
     }
 
     .form-row {
@@ -588,7 +595,9 @@
       opacity: 1;
     }
 
-    /* Changelog Card */
+    /* -------------------------------------------------------------
+       ОНОВЛЕНИЙ CHANGELOG СТИЛЬ ТА СТАБІЛЬНА СМУГА ПРОКРУТКИ
+    ------------------------------------------------------------- */
     .changelog-card {
       background: var(--inner-card-bg);
       border: 1px solid var(--card-border);
@@ -600,6 +609,8 @@
       gap: 14px;
       flex: 1;
       min-height: 180px;
+      max-height: 240px; /* Обмеження висоти всієї картки changelog */
+      overflow: hidden;
     }
 
     .changelog-header {
@@ -608,6 +619,7 @@
       justify-content: space-between;
       padding-bottom: 12px;
       border-bottom: 1px solid var(--card-border);
+      flex-shrink: 0;
     }
 
     .changelog-title-group {
@@ -637,20 +649,36 @@
       border: 1px solid rgba(59, 130, 246, 0.3);
     }
 
+    /* Контейнер списку змін із кастомною та динамічною прокруткою */
     .changelog-body {
       display: flex;
       flex-direction: column;
       gap: 12px;
-      max-height: 170px;
+      flex: 1;
       overflow-y: auto;
-      padding-right: 6px;
+      padding-right: 8px;
       transition: opacity 0.15s ease;
     }
 
-    .changelog-body::-webkit-scrollbar { width: 5px; }
+    /* Стилізація смуги прокрутки для Webkit (Chrome, Edge, Safari) */
+    .changelog-body::-webkit-scrollbar {
+      width: 6px;
+    }
+    .changelog-body::-webkit-scrollbar-track {
+      background: transparent;
+    }
     .changelog-body::-webkit-scrollbar-thumb {
-      background: var(--card-border);
-      border-radius: 6px;
+      background: var(--scrollbar-thumb);
+      border-radius: 10px;
+    }
+    .changelog-body::-webkit-scrollbar-thumb:hover {
+      background: var(--scrollbar-thumb-hover);
+    }
+
+    /* Стилізація для Firefox */
+    .changelog-body {
+      scrollbar-width: thin;
+      scrollbar-color: var(--scrollbar-thumb) transparent;
     }
 
     .changelog-body.updating { opacity: 0; }
@@ -703,6 +731,7 @@
     /* Кнопка прошивки */
     esp-web-install-button {
       margin-top: 4px;
+      flex-shrink: 0;
     }
 
     esp-web-install-button button {
@@ -1290,6 +1319,8 @@
           changelogContent.appendChild(item);
         }
 
+        // Завжди повертаємо скролл на початок при зміні версії
+        changelogContent.scrollTop = 0;
         changelogContent.classList.remove('updating');
       }, 100);
     }
