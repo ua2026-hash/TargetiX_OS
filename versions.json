@@ -10,6 +10,15 @@
   ],
   "sl1": [
     {
+      "value": "3.1",
+      "label": "v3.1",
+      "manifest": "manifest_sl1_v3.1.json",
+      "changes": [
+        { "type": "impr", "text": "Оптимізовано продуктивність та оновлено елементи інтерфейсу." },
+        { "type": "fix", "text": "Виправлено стабільність роботи на чіпсеті ESP32." }
+      ]
+    },
+    {
       "value": "2.7",
       "label": "v2.7",
       "manifest": "manifest_sl1_v2.7.json",
