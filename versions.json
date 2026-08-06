@@ -21,7 +21,7 @@
     {
       "value": "2.7",
       "label": "v2.7",
-      "manifest": "manifest_sl2_v2.7.json",
+      "manifest": "manifest_sl1_v2.7.json",
       "changes": [
         { "type": "impr", "text": "Оновлено зовнішній вигляд та інтерфейс у сучасному стилі." }
       ]
